@@ -42,5 +42,4 @@ process.on('SIGINT', () => {
         })
 });
 
-require('./users');
-require('./skills');
+require('./products');
