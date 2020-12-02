@@ -24,6 +24,7 @@ var log = bunyan.createLogger({
 });
 
 var router = require('./router/router');
+var apiRouter = require('./api/router/router');
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
@@ -53,7 +54,9 @@ app.use('/home', function(req, res, next){
         next();
     }
 })
+
 app.use('/', router);
+app.use('/api', apiRouter);
 
 app.listen(3007, function () {
 
