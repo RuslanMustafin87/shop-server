@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 const formidable = require('formidable');
 const fs = require('fs');
 const path = require('path');
+const FileAPI = require('file-api');
+const FileReader = FileAPI.FileReader;
 
 module.exports.getProducts = function (req, res) {
     const Product = mongoose.model('products');
@@ -48,37 +50,44 @@ module.exports.addProduct = function (req, res) {
     const form = new formidable.IncomingForm({
         multiple: true
     });
-    const upload = 'public/assets/images';
-
-    form.uploadDir = path.join(process.cwd(), upload);
 
     form.parse(req, (err, fields, files) => {
-        let fileName = path.join(upload, files.image.name)
-        fs.rename(files.image.path, fileName, () => {
-            res.json({
-                status: 200
-            });
-        });
 
-        let product = new Product({
-            name: fields.name,
-            price: fields.price,
-            background: fields.bg,
-        })
+        const reader = new FileReader();
 
-        product.save()
-            .then(
-                product => {
-                    res.status(201).json({
-                        status: 'Товар добавлен'
-                    });
-                },
-                err => {
-                    res.status(404).json({
-                        status: 'Ошибка при добавлении товара'
-                    });
-                }
-            )
+        reader.readAsArrayBuffer(files.image);
+
+        reader.onload = function () {
+
+            let binData = reader.result;
+
+            let product = new Product({
+                name: fields.name,
+                price: fields.price,
+                background: fields.bg,
+                image: binData
+            })
+
+            product.save()
+                .then(
+                    product => {
+                        res.status(201).json({
+                            message: 'Товар добавлен'
+                        });
+                    },
+                    err => {
+                        res.status(404).json({
+                            message: 'Ошибка при добавлении товара'
+                        });
+                    }
+                );
+        }
+
+        // fs.rename(files.image.path, fileName, () => {
+        // if (files.image === '') fs.unlinkSync(files.image.path); 
+        // });
+
+
     })
 }
 
@@ -107,15 +116,19 @@ module.exports.updateProduct = function (req, res) {
 
         let update = {};
 
-        for (let item of Object.keys(fields)){
+        for (let item of Object.keys(fields)) {
             if (fields[item] !== '') update[item] = fields[item];
+            console.log(fields[item]);
         }
 
-        console.log(update);
-        Product.findByIdAndUpdate(fields.id, update, (err)=>{
-            if (err) res.json({status: 'Ошибка обновленпия продукта'});
+        Product.findByIdAndUpdate(fields.id, update, (err) => {
+            if (err) res.json({
+                status: 'Ошибка обновленпия продукта'
+            });
 
-            res.json({status: 'Товар обновлен'});
+            res.json({
+                status: 'Товар обновлен'
+            });
         })
     })
 }

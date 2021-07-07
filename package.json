@@ -15,12 +15,14 @@
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "express-session": "^1.17.1",
+    "file-api": "^0.10.4",
+    "formidable": "^1.2.2",
     "fs": "^0.0.1-security",
-    "mongoose": "^5.9.18",
+    "mongoose": "^5.13.1",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
     "pug": "^2.0.4",
-    "redis": "^3.0.2",
+    "redis": "^3.1.2",
     "request-promise": "^4.2.5"
   },
   "devDependencies": {
