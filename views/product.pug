@@ -1,0 +1,19 @@
+extends ./templates/main.pug
+
+block var
+
+    - var title = 'Товар'
+    - var page = 'product'
+
+block content
+    main.product-page
+        .product__pictures
+            include ./blocks/sliderProduct/sliderProduct
+        h1.product__name
+        p.product__price
+        button.product__button-add Добавить в корзину
+        
+        
+        
+        
+        

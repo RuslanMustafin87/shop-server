@@ -2,13 +2,11 @@ const express = require('express');
 const router = express.Router();
 
 const ctrlIndex = require('../controllers/index');
-const ctrlHome = require('../controllers/home');
+const ctrlProduct = require('../controllers/product');
 
 router.get('/', ctrlIndex.getIndex);
-router.post('/', ctrlIndex.authHome);
+router.get('/product', ctrlProduct.getProduct);
 
 router.post('/signin', ctrlIndex.signIn);
-
-router.get('/home', ctrlHome.getHome);
 
 module.exports = router;

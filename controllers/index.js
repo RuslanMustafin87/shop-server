@@ -5,6 +5,7 @@ const crypto = require('crypto');
 module.exports.getIndex = function (req, res) {
     //log.info({ req: req }, 'start request');
 
+    // res.set('Content-Security-Policy-Report-Only');
     res.render('index.pug', {
         header2: 'Hello'
     });

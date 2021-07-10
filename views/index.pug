@@ -1,20 +1,13 @@
-mixin button(classButton)
-    button(class= classButton) Button
+extends ./templates/main.pug
 
-<!DOCTYPE html>
-html(lang="en")
-    head
-        meta(charset="UTF-8")
-        meta(name="viewport", content="width=device-width, initial-scale=1.0")
-        title Document
-    body
-        form#formLogin(action='/' method='POST' )
-            input(type="text" name='user') 
-            input(type="password" name='password')
-            input(type='submit' name='submit' value='Send')
-        form#formSignIn(action='/signin' method='POST' name='formSignIn')
-            input(type="text" name='user')
-            input(type="password" name='password')
-        button#button-submit(name='submit') SignIn
-        script(src='/assets/js/index.js')
-                 
+block var
+    - var title = 'Магазин'
+    - var page = 'index'
+
+block content
+    ul.products
+    select.sort-products(name='sort-products')
+        option(value='sortIncreasedPrice' selected) По возростающей цене
+        option(value='sortDecreasedPrice' ) По убывающей цене
+        option(value='sortAlphabet') По алфавиту
+    
