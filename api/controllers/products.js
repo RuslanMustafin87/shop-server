@@ -1,9 +1,4 @@
 const mongoose = require('mongoose');
-const formidable = require('formidable');
-const fs = require('fs');
-const path = require('path');
-const FileAPI = require('file-api');
-const FileReader = FileAPI.FileReader;
 
 module.exports.getProducts = function (req, res) {
     const Product = mongoose.model('products');
@@ -12,9 +7,7 @@ module.exports.getProducts = function (req, res) {
         .then(items => {
 
             if (!items.length) {
-                res.status(404).json({
-
-                })
+                res.status(404).json({})
             } else {
                 res.status(200).json(items);
             }
@@ -33,6 +26,7 @@ module.exports.getOneProduct = function (req, res) {
                         status: 'Товар не найден'
                     })
                 } else {
+                    // console.log(item.image);
                     res.status(200).json(item);
                 }
             },
@@ -47,48 +41,32 @@ module.exports.getOneProduct = function (req, res) {
 module.exports.addProduct = function (req, res) {
     const Product = mongoose.model('products');
 
-    const form = new formidable.IncomingForm({
-        multiple: true
+    let product = new Product({
+        name: req.body.name,
+        price: req.body.price,
+        background: req.body.background,
+        image: req.body.image
     });
 
-    form.parse(req, (err, fields, files) => {
+    product.save()
+        .then(
+            product => {
+                res.status(201).json({
+                    message: 'Товар добавлен'
+                });
+            },
+            err => {
+                res.status(404).json({
+                    message: 'Ошибка при добавлении товара'
+                });
+            }
+        );
 
-        const reader = new FileReader();
+    Product.find({_id: '60f7ff812d613a2b4da29ccd'})
+        .then(item => {
+            // console.log(item);
+        })
 
-        reader.readAsArrayBuffer(files.image);
-
-        reader.onload = function () {
-
-            let binData = reader.result;
-
-            let product = new Product({
-                name: fields.name,
-                price: fields.price,
-                background: fields.bg,
-                image: binData
-            })
-
-            product.save()
-                .then(
-                    product => {
-                        res.status(201).json({
-                            message: 'Товар добавлен'
-                        });
-                    },
-                    err => {
-                        res.status(404).json({
-                            message: 'Ошибка при добавлении товара'
-                        });
-                    }
-                );
-        }
-
-        // fs.rename(files.image.path, fileName, () => {
-        // if (files.image === '') fs.unlinkSync(files.image.path); 
-        // });
-
-
-    })
 }
 
 module.exports.deleteProduct = function (req, res) {

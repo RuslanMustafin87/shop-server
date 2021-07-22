@@ -1,9 +1,54 @@
-const mongoose = require('mongoose');
+const formidable = require('formidable');
+const FileAPI = require('file-api');
+const FileReader = FileAPI.FileReader;
+const axios = require('axios');
 
 module.exports.getProduct = function (req, res) {
-    //log.info({ req: req }, 'start request');
 
-    // res.set('Content-Security-Policy-Report-Only');
     res.render('product.pug');
-    //log.info({ res: res }, 'done response');
 };
+
+module.exports.addProduct = function (req, res) {
+
+    const form = new formidable.IncomingForm({
+        multiple: true
+    });
+
+    form.parse(req, (err, fields, files) => {
+
+        // const reader = new FileReader();
+        
+        // reader.readAsDataURL(files.image);
+
+        // reader.onload = function () {
+
+            // let binData = reader.result;
+            console.log(fields.image);
+            let data = {
+                name: fields.name,
+                price: fields.price,
+                background: fields.bg,
+                image: fields.image
+            }
+            console.log(data);
+            axios({
+                url: 'http://localhost:3007/api/products/addproduct',
+                method: "post",
+                data: data
+            }).then(
+                response => {
+                    res.json(response.data);
+                },
+                err => {
+                    console.log('Ошибка! ' + err.message);
+                }
+            ).catch(
+                err => {
+                    console.log('Ошибка ' + err.message);
+                }
+            )
+
+        // }
+
+    })
+}
