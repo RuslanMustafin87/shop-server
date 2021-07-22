@@ -26,7 +26,6 @@ module.exports.getOneProduct = function (req, res) {
                         status: 'Товар не найден'
                     })
                 } else {
-                    // console.log(item.image);
                     res.status(200).json(item);
                 }
             },
@@ -44,7 +43,6 @@ module.exports.addProduct = function (req, res) {
     let product = new Product({
         name: req.body.name,
         price: req.body.price,
-        background: req.body.background,
         image: req.body.image
     });
 
@@ -60,13 +58,13 @@ module.exports.addProduct = function (req, res) {
                     message: 'Ошибка при добавлении товара'
                 });
             }
-        );
-
-    Product.find({_id: '60f7ff812d613a2b4da29ccd'})
-        .then(item => {
-            // console.log(item);
-        })
-
+        ).catch(
+            (err) => {
+                res.status(403).json({
+                    message: 'База данных не найдена' + err.message
+                })
+            }
+        )
 }
 
 module.exports.deleteProduct = function (req, res) {

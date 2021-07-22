@@ -4,7 +4,7 @@ const FileReader = FileAPI.FileReader;
 const axios = require('axios');
 
 module.exports.getProduct = function (req, res) {
-
+    
     res.render('product.pug');
 };
 
@@ -16,21 +16,17 @@ module.exports.addProduct = function (req, res) {
 
     form.parse(req, (err, fields, files) => {
 
-        // const reader = new FileReader();
-        
-        // reader.readAsDataURL(files.image);
+        const reader = new FileReader();
+        reader.readAsArrayBuffer(files.image);
 
-        // reader.onload = function () {
+        reader.onload = function () {
 
-            // let binData = reader.result;
-            console.log(fields.image);
             let data = {
                 name: fields.name,
                 price: fields.price,
-                background: fields.bg,
-                image: fields.image
+                image: reader.result
             }
-            console.log(data);
+
             axios({
                 url: 'http://localhost:3007/api/products/addproduct',
                 method: "post",
@@ -40,7 +36,10 @@ module.exports.addProduct = function (req, res) {
                     res.json(response.data);
                 },
                 err => {
-                    console.log('Ошибка! ' + err.message);
+                    console.log('Ошибка ' + err.message);
+                    res.json({
+                        message: err.response.data.message
+                    })
                 }
             ).catch(
                 err => {
@@ -48,7 +47,7 @@ module.exports.addProduct = function (req, res) {
                 }
             )
 
-        // }
+        }
 
-    })
-}
+    });
+};
