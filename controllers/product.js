@@ -17,20 +17,19 @@ module.exports.addProduct = function (req, res) {
     form.parse(req, (err, fields, files) => {
 
         // const reader = new FileReader();
-        
+
         // reader.readAsDataURL(files.image);
 
         // reader.onload = function () {
 
             // let binData = reader.result;
-            console.log(fields.image);
+
             let data = {
                 name: fields.name,
                 price: fields.price,
-                background: fields.bg,
-                image: fields.image
+                image: files.image
             }
-            console.log(data);
+            // console.log(files.image);
             axios({
                 url: 'http://localhost:3007/api/products/addproduct',
                 method: "post",

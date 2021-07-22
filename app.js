@@ -31,7 +31,7 @@ app.set('view engine', 'pug');
 
 app.use(cors({
     origin: '*',
-    optionsSuccessStatus: 200 
+    optionsSuccessStatus: 200
 }));
 app.use(express.json({
     limit: '50mb'

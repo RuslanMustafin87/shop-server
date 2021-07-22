@@ -1,4 +1,8 @@
 const mongoose = require('mongoose');
+const formidable = require('formidable');
+const FileAPI = require('file-api');
+const FileReader = FileAPI.FileReader;
+
 
 module.exports.getProducts = function (req, res) {
     const Product = mongoose.model('products');
@@ -26,7 +30,6 @@ module.exports.getOneProduct = function (req, res) {
                         status: 'Товар не найден'
                     })
                 } else {
-                    // console.log(item.image);
                     res.status(200).json(item);
                 }
             },
@@ -41,28 +44,44 @@ module.exports.getOneProduct = function (req, res) {
 module.exports.addProduct = function (req, res) {
     const Product = mongoose.model('products');
 
-    let product = new Product({
-        name: req.body.name,
-        price: req.body.price,
-        background: req.body.background,
-        image: req.body.image
+    const form = new formidable.IncomingForm({
+        multiple: true
     });
 
-    product.save()
-        .then(
-            product => {
-                res.status(201).json({
-                    message: 'Товар добавлен'
-                });
-            },
-            err => {
-                res.status(404).json({
-                    message: 'Ошибка при добавлении товара'
-                });
-            }
-        );
+    form.parse(req, (err, fields, files) => {
 
-    Product.find({_id: '60f7ff812d613a2b4da29ccd'})
+        const reader = new FileReader();
+        reader.readAsArrayBuffer(files.image);
+
+        reader.onload = function () {
+
+            let product = new Product({
+                name: fields.name,
+                price: fields.price,
+                image: reader.result
+            });
+
+            product.save()
+                .then(
+                    product => {
+                        res.status(201).json({
+                            message: 'Товар добавлен'
+                        });
+                    },
+                    err => {
+                        res.status(404).json({
+                            message: 'Ошибка при добавлении товара'
+                        });
+                    }
+                );
+        };
+    })
+
+
+
+    Product.find({
+            _id: '60f7ff812d613a2b4da29ccd'
+        })
         .then(item => {
             // console.log(item);
         })
