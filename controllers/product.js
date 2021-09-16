@@ -4,7 +4,6 @@ const FileReader = FileAPI.FileReader;
 const axios = require('axios');
 
 module.exports.getProduct = function (req, res) {
-    
     res.render('product.pug');
 };
 
@@ -17,6 +16,7 @@ module.exports.addProduct = function (req, res) {
     form.parse(req, (err, fields, files) => {
 
         const reader = new FileReader();
+
         reader.readAsArrayBuffer(files.image);
 
         reader.onload = function () {

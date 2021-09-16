@@ -1,4 +1,8 @@
 const mongoose = require('mongoose');
+const formidable = require('formidable');
+const FileAPI = require('file-api');
+const FileReader = FileAPI.FileReader;
+
 
 module.exports.getProducts = function (req, res) {
     const Product = mongoose.model('products');
@@ -41,10 +45,10 @@ module.exports.addProduct = function (req, res) {
     const Product = mongoose.model('products');
 
     let product = new Product({
-        name: req.body.name,
-        price: req.body.price,
-        image: req.body.image
-    });
+                name: req.body.name,
+                price: req.body.price,
+                image: req.body.image
+            });
 
     product.save()
         .then(
@@ -58,13 +62,15 @@ module.exports.addProduct = function (req, res) {
                     message: 'Ошибка при добавлении товара'
                 });
             }
-        ).catch(
-            (err) => {
-                res.status(403).json({
-                    message: 'База данных не найдена' + err.message
-                })
-            }
-        )
+        );
+
+    Product.find({
+            _id: '60f7ff812d613a2b4da29ccd'
+        })
+        .then(item => {
+            // console.log(item);
+        })
+
 }
 
 module.exports.deleteProduct = function (req, res) {
