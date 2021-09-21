@@ -24,7 +24,8 @@ module.exports.addProduct = function (req, res) {
             let data = {
                 name: fields.name,
                 price: fields.price,
-                image: reader.result
+                image: reader.result,
+                category: fields.category
             }
 
             axios({
@@ -51,3 +52,4 @@ module.exports.addProduct = function (req, res) {
 
     });
 };
+

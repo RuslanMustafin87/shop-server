@@ -45,10 +45,11 @@ module.exports.addProduct = function (req, res) {
     const Product = mongoose.model('products');
 
     let product = new Product({
-                name: req.body.name,
-                price: req.body.price,
-                image: req.body.image
-            });
+        name: req.body.name,
+        price: req.body.price,
+        image: req.body.image,
+        category: req.body.category
+    });
 
     product.save()
         .then(
@@ -104,9 +105,13 @@ module.exports.updateProduct = function (req, res) {
         }
 
         Product.findByIdAndUpdate(fields.id, update, (err) => {
-            if (err) res.json({
-                status: 'Ошибка обновленпия продукта'
-            });
+            if (err) {
+                console.log('err');
+                res.json({
+                    status: 'Ошибка обновления продукта'
+                });
+                return;
+            };
 
             res.json({
                 status: 'Товар обновлен'
