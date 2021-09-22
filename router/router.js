@@ -9,10 +9,11 @@ const ctrlAdmin = require('../controllers/admin');
 router.get('/', ctrlIndex.getIndex);
 
 router.get('/product', ctrlProduct.getProduct);
-router.post('/products/addproduct', ctrlProduct.addProduct);
 
 router.get('/basket', ctrlBasket.getBasket);
 
 router.get('/admin', ctrlAdmin.getAdmin);
+router.post('/admin/addproduct', ctrlAdmin.addProduct);
+router.post('/admin/updateproduct', ctrlAdmin.updateProduct);
 
 module.exports = router;

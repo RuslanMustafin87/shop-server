@@ -64,14 +64,6 @@ module.exports.addProduct = function (req, res) {
                 });
             }
         );
-
-    Product.find({
-            _id: '60f7ff812d613a2b4da29ccd'
-        })
-        .then(item => {
-            // console.log(item);
-        })
-
 }
 
 module.exports.deleteProduct = function (req, res) {
@@ -94,28 +86,18 @@ module.exports.updateProduct = function (req, res) {
     const form = new formidable.IncomingForm({
         multiple: true
     });
-
-    form.parse(req, (err, fields, files) => {
-
-        let update = {};
-
-        for (let item of Object.keys(fields)) {
-            if (fields[item] !== '') update[item] = fields[item];
-            console.log(fields[item]);
-        }
-
-        Product.findByIdAndUpdate(fields.id, update, (err) => {
-            if (err) {
-                console.log('err');
-                res.json({
-                    status: 'Ошибка обновления продукта'
-                });
-                return;
-            };
-
+    
+    Product.findByIdAndUpdate(req.body.id, req.body, (err) => {
+        if (err) {
             res.json({
-                status: 'Товар обновлен'
+                status: 'Ошибка обновления продукта'
             });
-        })
+            return;
+        };
+
+        res.json({
+            status: 'Товар обновлен'
+        });
     })
+
 }
