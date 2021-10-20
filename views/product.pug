@@ -4,13 +4,14 @@ block var
 
     - var title = 'Товар'
     - var page = 'product'
-
+    // TODO стилизовать
 block content
-    main.product-page
+    main.product-page 
         .product__pictures
-            include ./blocks/sliderProduct/sliderProduct
-        h1.product__name
-        p.product__price
+            img(src= image, alt="")
+            //- include ../blocks/sliderProduct/sliderProduct
+        h1.product__name #{name}
+        p.product__price #{price}
         button.product__button-add Добавить в корзину
         
         

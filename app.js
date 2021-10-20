@@ -60,9 +60,10 @@ app.use('/home', function(req, res, next){
     }
 })
 
-
 app.use('/', router);
 app.use('/api', apiRouter);
+
+
 
 app.listen(3007, function () {
 

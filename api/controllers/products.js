@@ -1,35 +1,34 @@
 const mongoose = require('mongoose');
-const formidable = require('formidable');
-const FileAPI = require('file-api');
-const FileReader = FileAPI.FileReader;
-
 
 module.exports.getProducts = function (req, res) {
     const Product = mongoose.model('products');
 
     Product.find()
-        .then(items => {
+        .then(
+            items => {
 
-            if (!items.length) {
-                res.status(404).json({})
-            } else {
-                res.status(200).json(items);
-            }
-        })
+                if (!items.length) {
+                    res.status(404).json({})
+                } else {
+                    res.status(200).json(items);
+                }
+            })
 }
 
 module.exports.getOneProduct = function (req, res) {
     const Product = mongoose.model('products');
 
     Product.findOne({
-            _id: req.body.id
+            _id: req.query.id
         })
-        .then(item => {
+        .then(
+            item => {
                 if (!item) {
                     res.status(404).json({
                         status: 'Товар не найден'
                     })
                 } else {
+                    console.log(item);
                     res.status(200).json(item);
                 }
             },
@@ -68,14 +67,17 @@ module.exports.addProduct = function (req, res) {
 
 module.exports.deleteProduct = function (req, res) {
     const Product = mongoose.model('products');
-
-    Product.findByIdAndDelete(req.query.id, function (err) {
-        if (err) return res.json({
-            status: "Нет такого товара"
-        })
+    
+    Product.findByIdAndDelete(req.query.id, (err) => {
+        if (err) {
+            res.status(404).json({
+                message: "Нет такого товара"
+            });
+            return;
+        }
 
         res.status(201).json({
-            status: "Товар удален"
+            message: "Товар удален"
         })
     });
 }
@@ -83,20 +85,16 @@ module.exports.deleteProduct = function (req, res) {
 module.exports.updateProduct = function (req, res) {
     const Product = mongoose.model('products');
 
-    const form = new formidable.IncomingForm({
-        multiple: true
-    });
-    
     Product.findByIdAndUpdate(req.body.id, req.body, (err) => {
         if (err) {
-            res.json({
-                status: 'Ошибка обновления продукта'
+            res.status(404).json({
+                message: 'Ошибка обновления продукта'
             });
             return;
         };
 
-        res.json({
-            status: 'Товар обновлен'
+        res.status(201).json({
+            message: 'Товар обновлен'
         });
     })
 

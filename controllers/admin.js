@@ -5,29 +5,6 @@ const axios = require('axios');
 
 const PORT = 3007;
 
-// функция отправки данных в БД
-function sendData(res, data, path) {
-    axios({
-        url: `http://localhost:${PORT}/api/products/${path}`,
-        method: "post",
-        data: data
-    }).then(
-        response => {
-            res.json(response.data);
-        },
-        err => {
-            console.log('Ошибка ' + err.message);
-            res.json({
-                message: err.response.data.message
-            })
-        }
-    ).catch(
-        err => {
-            console.log('Ошибка ' + err.message);
-        }
-    )
-}
-
 module.exports.getAdmin = function (req, res) {
     res.render('admin.pug');
 };
@@ -63,9 +40,9 @@ module.exports.addProduct = function (req, res) {
                 },
                 err => {
                     console.log('Ошибка ' + err.message);
-                    res.json({
-                        message: err.response.data.message
-                    })
+                    res.json(
+                        err.response.data
+                    )
                 }
             ).catch(
                 err => {
@@ -104,9 +81,7 @@ module.exports.updateProduct = function (req, res) {
                 },
                 err => {
                     console.log('Ошибка ' + err.message);
-                    res.json({
-                        message: err.response.data.message
-                    })
+                    res.json(err.response.data)
                 }
             ).catch(
                 err => {
@@ -136,9 +111,7 @@ module.exports.updateProduct = function (req, res) {
                 },
                 err => {
                     console.log('Ошибка ' + err.message);
-                    res.json({
-                        message: err.response.data.message
-                    })
+                    res.json(err.response.data)
                 }
             ).catch(
                 err => {

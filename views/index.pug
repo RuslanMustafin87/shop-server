@@ -3,11 +3,25 @@ extends ./templates/main.pug
 block var
     - var title = 'Магазин'
     - var page = 'index'
-
 block content
-    main.index
-        ul.index__products.products
-        select.main-index__sort.sort-products(name='sort-products')
-            option(value='sortIncreasedPrice' selected) По возростающей цене
-            option(value='sortDecreasedPrice' ) По убывающей цене
-            option(value='sortAlphabet') По алфавиту
+    main.main-index
+        .main-index__wrapper
+            select.main-index__sort.sort-products(name='sort-products')
+                option(value='sortIncreasedPrice' selected) По возростающей цене
+                option(value='sortDecreasedPrice' ) По убывающей цене
+                option(value='sortAlphabet') По алфавиту
+            select.main-index__sort-by-category.sort-products-by-category(name='category' placeholder='категория')
+                option(value="all") Все категории 
+                option(value="sofa") Диван 
+                option(value="dresser") Комод
+                option(value="wardrobe") Шкаф 
+                option(value="table") Стол 
+            ul.main-index__products.products
+                each item in products
+                    li.products__item.product(data-id= `${item._id}`  data-name= `${item.name}` data-price= `${item.price}` data-category=`${item.category}`)
+                        a.product__link(href= `product?id=${item._id}`)
+                            //- img.product__image(src="blob:http://localhost:3007/b5b2006e-d158-4872-a929-90e592dfe2e5")
+                            img.product__image()
+                        span.product__name= item.name
+                        span.product__price= item.price
+                        button.product__button Добавить
