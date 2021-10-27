@@ -17,7 +17,7 @@ module.exports.getProducts = function (req, res) {
 
 module.exports.getOneProduct = function (req, res) {
     const Product = mongoose.model('products');
-
+    
     Product.findOne({
             _id: req.query.id
         })
@@ -28,7 +28,6 @@ module.exports.getOneProduct = function (req, res) {
                         status: 'Товар не найден'
                     })
                 } else {
-                    console.log(item);
                     res.status(200).json(item);
                 }
             },

@@ -9,6 +9,8 @@ const ctrlAdmin = require('../controllers/admin');
 router.get('/', ctrlIndex.getIndex);
 
 router.get('/product', ctrlProduct.getProduct);
+router.put('/product/updateproduct', ctrlProduct.updateProduct);
+router.put('/product/updateratingproduct', ctrlProduct.updateRatingProduct);
 
 router.get('/basket', ctrlBasket.getBasket);
 
