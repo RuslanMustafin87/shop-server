@@ -15,43 +15,62 @@ module.exports.addProduct = function (req, res) {
         multiple: true
     });
 
-    form.parse(req, (err, fields, files) => {
-
-        const reader = new FileReader();
-
-        reader.readAsArrayBuffer(files.image);
-
-        reader.onload = function () {
-
-            let data = {
-                name: fields.name,
-                price: fields.price,
-                image: reader.result,
-                category: fields.category
-            }
-
-            axios({
-                url: `http://localhost:${PORT}/api/products/addproduct`,
-                method: "post",
-                data: data
-            }).then(
-                response => {
-                    res.json(response.data);
-                },
-                err => {
-                    console.log('Ошибка ' + err.message);
-                    res.json(
-                        err.response.data
-                    )
-                }
-            ).catch(
-                err => {
-                    console.log('Ошибка ' + err.message);
-                }
-            )
-
+    form.parse(req, async (err, fields, files) => {
+        if (err) {
+            return new Error('Ошибка чтения формы при добавлении товара ' + err.message);
         }
 
+        let imagesBuffer = [];
+
+        let imageFiles = Object.values(files);
+
+        for (let i = 0; i < imageFiles.length; i++) {
+            const imageAsBuffer = new Promise(function (resolve, reject) {
+                const reader = new FileReader();
+                
+                reader.readAsArrayBuffer(imageFiles[i]);
+
+                reader.onload = function () {
+                    resolve(reader.result);
+                }
+
+                reader.onerror = function () {
+                    console.log('Ошибка чтения файла ' + reader.error);
+                    reject(reader.error);
+                }
+            })
+
+            imagesBuffer.push(imageAsBuffer);
+        }
+
+        let images = await Promise.all(imagesBuffer)
+
+        let data = {
+            name: fields.name,
+            price: fields.price,
+            images: images,
+            category: fields.category
+        }
+        console.log(data);
+        axios({
+            url: `http://localhost:${PORT}/api/products/addproduct`,
+            method: "post",
+            data: data
+        }).then(
+            response => {
+                res.json(response.data);
+            },
+            err => {
+                console.log('Ошибка ' + err.message);
+                res.json(
+                    err.response.data
+                )
+            }
+        ).catch(
+            err => {
+                console.log('Ошибка ' + err.message);
+            }
+        )
     });
 };
 

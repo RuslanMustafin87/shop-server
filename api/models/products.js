@@ -9,8 +9,8 @@ const productsSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    image: {
-        type: Buffer
+    images: {
+        type: [Buffer],
     },
     category: {
         type: String,

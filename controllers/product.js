@@ -9,9 +9,7 @@ module.exports.getProduct = function (req, res) {
     }).then(
         response => {
             response.data.rating = Math.round(response.data.rating.generalRating);
-            console.log(response.data);
             res.render('product.pug', response.data);
-
         },
         err => {
             console.log('Ошибка 1 ' + err.message);
@@ -74,7 +72,6 @@ module.exports.updateRatingProduct = function (req, res) {
             let body = {};
 
             if (!data.rating) {
-                console.log('ji');
 
                 body = Object.assign(req.body, {
                     rating: {
@@ -84,7 +81,6 @@ module.exports.updateRatingProduct = function (req, res) {
                 });
 
             } else {
-                console.log('ji2');
 
                 let generalRating = +((data.rating.generalRating * data.rating.countOfVoters + req.body.rating) / ( data.rating.countOfVoters + 1)).toFixed(2);
 
@@ -103,8 +99,9 @@ module.exports.updateRatingProduct = function (req, res) {
             })
         },
     ).then(
-        res => {
-            console.log(res.data.message);
+        response => {
+            console.log(response.data.message);
+            res.status(200).json(response.data);
         }
     ).catch(
         err => {

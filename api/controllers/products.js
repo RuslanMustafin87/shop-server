@@ -45,7 +45,7 @@ module.exports.addProduct = function (req, res) {
     let product = new Product({
         name: req.body.name,
         price: req.body.price,
-        image: req.body.image,
+        images: req.body.images,
         category: req.body.category
     });
 
