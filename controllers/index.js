@@ -14,13 +14,12 @@ module.exports.getIndex = function (req, res) {
         },
         err => {
             console.log('Ошибка ' + err.message);
-            res.json(
-                err.response.data
-            )
+            res.render('error.pug', {message: err.response.data.message});
         }
     ).catch(
         err => {
             console.log('Ошибка ' + err.message);
+            res.render('error.pug', {message: err.response.data.message});
         }
     )
 };

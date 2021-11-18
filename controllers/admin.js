@@ -49,9 +49,14 @@ module.exports.addProduct = function (req, res) {
             name: fields.name,
             price: fields.price,
             images: images,
-            category: fields.category
+            category: fields.category,
+            rating: {
+                roundedRating: 0, 
+                realRating: 0,
+                countOfVoters: 0
+            }
         }
-        console.log(data);
+        
         axios({
             url: `http://localhost:${PORT}/api/products/addproduct`,
             method: "post",

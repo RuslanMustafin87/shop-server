@@ -12,28 +12,34 @@ module.exports.getProducts = function (req, res) {
                 } else {
                     res.status(200).json(items);
                 }
-            })
+            },
+            err => {
+                console.log('Ошибка в БД ' + err.message);
+                res.status(404).json({message: `Ошибка в БД ${err.message}`});
+            }
+            )
+        .catch(
+            err => {
+                console.log('Ошибка в БД ' + err.message);
+                res.status(404).json({message: `Ошибка в БД ${err.message}`});
+            }
+        )
 }
 
 module.exports.getOneProduct = function (req, res) {
     const Product = mongoose.model('products');
-    
+
     Product.findOne({
             _id: req.query.id
         })
         .then(
             item => {
-                if (!item) {
-                    res.status(404).json({
-                        status: 'Товар не найден'
-                    })
-                } else {
-                    res.status(200).json(item);
-                }
+                res.status(200).json(item);
             },
             err => {
+                console.log('Товар не найден ' + err.message);
                 res.status(404).json({
-                    status: 'Товар не найден'
+                    message: 'Товар не найден'
                 })
             }
         )
@@ -46,7 +52,8 @@ module.exports.addProduct = function (req, res) {
         name: req.body.name,
         price: req.body.price,
         images: req.body.images,
-        category: req.body.category
+        category: req.body.category,
+        rating: req.body.rating,
     });
 
     product.save()
@@ -66,7 +73,7 @@ module.exports.addProduct = function (req, res) {
 
 module.exports.deleteProduct = function (req, res) {
     const Product = mongoose.model('products');
-    
+
     Product.findByIdAndDelete(req.query.id, (err) => {
         if (err) {
             res.status(404).json({

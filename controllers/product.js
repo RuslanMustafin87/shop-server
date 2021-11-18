@@ -8,19 +8,20 @@ module.exports.getProduct = function (req, res) {
         method: 'GET',
     }).then(
         response => {
-            response.data.rating = Math.round(response.data.rating.generalRating);
             res.render('product.pug', response.data);
         },
         err => {
-            console.log('Ошибка 1 ' + err.message);
-            res.render('product.pug', Object.assign(response.data, {}));
-            // res.json(
-            //     err.response.data
-            // )
+            console.log('Ошибка в БД не найдена ' + err.message);
+            res.render('error.pug', {
+                message: `${err.response.data.message} ${err.message}`
+            });
         }
     ).catch(
         err => {
-            console.log('Ошибка 2 ' + err.message);
+            console.log('Ошибка в данных ' + err.message);
+            res.render('error.pug', {
+                message: `Ошибка в данных: ${err.message}`
+            });
         }
     )
 
@@ -61,36 +62,20 @@ module.exports.updateRatingProduct = function (req, res) {
         response => {
             return response.data;
         },
-        err => {
-            console.log('Ошибка 1 ' + err.message);
-            res.json(
-                err.response.data
-            )
-        }
     ).then(
         data => {
-            let body = {};
+            
+            let realRating = +((data.rating.realRating * data.rating.countOfVoters + req.body.rating) / (data.rating.countOfVoters + 1)).toFixed(2);
 
-            if (!data.rating) {
+            let roundedRating = Math.round(realRating);
 
-                body = Object.assign(req.body, {
-                    rating: {
-                        generalRating: req.body.rating,
-                        countOfVoters: 1
-                    }
-                });
-
-            } else {
-
-                let generalRating = +((data.rating.generalRating * data.rating.countOfVoters + req.body.rating) / ( data.rating.countOfVoters + 1)).toFixed(2);
-
-                body = Object.assign(req.body, {
-                    rating: {
-                        generalRating: generalRating,
-                        countOfVoters: ++data.rating.countOfVoters
-                    }
-                });
-            }
+            let body = Object.assign(req.body, {
+                rating: {
+                    roundedRating,
+                    realRating,
+                    countOfVoters: ++data.rating.countOfVoters,
+                }
+            });
 
             return axios({
                 url: `http://localhost:${PORT}/api/products/updateproduct`,
@@ -105,7 +90,10 @@ module.exports.updateRatingProduct = function (req, res) {
         }
     ).catch(
         err => {
-            console.log('Ошибка 2 ' + err.message);
+            console.log('Ошибка ' + err.message);
+            // res.json(
+            //     err.response.data
+            // )
         }
     )
 }
