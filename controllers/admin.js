@@ -3,7 +3,7 @@ const FileAPI = require('file-api');
 const FileReader = FileAPI.FileReader;
 const axios = require('axios');
 
-const PORT = 3007;
+const config = require('../configs/config.json');
 
 module.exports.getAdmin = function (req, res) {
     res.render('admin.pug');
@@ -58,7 +58,7 @@ module.exports.addProduct = function (req, res) {
         }
         
         axios({
-            url: `http://localhost:${PORT}/api/products/addproduct`,
+            url: `http://92.53.105.229:${config.PORT}/api/products/addproduct`,
             method: "post",
             data: data
         }).then(
@@ -96,7 +96,7 @@ module.exports.updateProduct = function (req, res) {
         if (files.image.name == '') {
 
             axios({
-                url: `http://localhost:${PORT}/api/products/updateproduct`,
+                url: `http://92.53.105.229:${config.PORT}/api/products/updateproduct`,
                 method: "post",
                 data: update
             }).then(
@@ -126,7 +126,7 @@ module.exports.updateProduct = function (req, res) {
             update.image = reader.result;
 
             axios({
-                url: `http://localhost:${PORT}/api/products/updateproduct`,
+                url: `http://92.53.105.229:${config.PORT}/api/products/updateproduct`,
                 method: "post",
                 data: update
             }).then(

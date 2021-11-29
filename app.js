@@ -11,6 +11,7 @@ const session = require('express-session');
 //const redisStorage = require('connect-redis')(session);
 const mongoose = require('mongoose');
 const MongoStore = require('connect-mongo')(session);
+const config = require('./configs/config.json');
 //const client = redis.createClient();
 
 require('./api/models/db');
@@ -65,7 +66,7 @@ app.use('/api', apiRouter);
 
 
 
-app.listen(3007, function () {
+app.listen(config.PORT, function () {
 
     log.info('server listening');
     console.log('Запущено на порте 3007');

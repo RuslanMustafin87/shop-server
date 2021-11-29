@@ -1,4 +1,5 @@
 const axios = require('axios');
+const config = require('../configs/config.json');
 
 module.exports.getBasket = function (req, res) {
     res.render('basket.pug');
@@ -13,7 +14,7 @@ module.exports.getImages = async function (req, res) {
 
         let product = new Promise(function (res, rej) {
 
-            axios.get(`http://127.0.0.1:3007/api/products/getproduct?id=${item.id}`)
+            axios.get(`http://92.53.105.229:${config.PORT}/api/products/getproduct?id=${item.id}`)
                 .then(
                     response => {
                         res(response.data);

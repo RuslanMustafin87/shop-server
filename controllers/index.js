@@ -1,11 +1,10 @@
 const axios = require('axios');
-
-const PORT = 3007;
+const config = require('../configs/config');
 
 module.exports.getIndex = function (req, res) {
     
     axios({
-        url: `http://localhost:${PORT}/api/index`,
+        url: `http://92.53.105.229:${config.PORT}/api/index`,
         method: "get",
     }).then(
         response => {
