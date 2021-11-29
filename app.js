@@ -7,8 +7,6 @@ const cors = require('cors');
 const bunyan = require('bunyan');
 const flash = require('connect-flash');
 const session = require('express-session');
-//const redis = require('redis');
-//const redisStorage = require('connect-redis')(session);
 const mongoose = require('mongoose');
 const MongoStore = require('connect-mongo')(session);
 
