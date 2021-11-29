@@ -13,6 +13,7 @@ router.put('/product/updateproduct', ctrlProduct.updateProduct);
 router.put('/product/updateratingproduct', ctrlProduct.updateRatingProduct);
 
 router.get('/basket', ctrlBasket.getBasket);
+router.post('/basket/getimages', ctrlBasket.getImages);
 
 router.get('/admin', ctrlAdmin.getAdmin);
 router.post('/admin/addproduct', ctrlAdmin.addProduct);
