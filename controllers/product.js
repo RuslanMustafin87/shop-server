@@ -1,10 +1,15 @@
 const axios = require('axios');
+
 const config = require('../configs/config.json');
+const PORT = config.http.PORT;
+const URL = config.http.URL;
+// const PORT = config.testHttp.PORT;
+// const URL = config.testHttp.URL;
 
 module.exports.getProduct = function (req, res) {
 
     axios({
-        url: `http://92.53.105.229:${config.config.PORT}/api/products/getproduct?id=${req.query.id}`,
+        url: `${URL}:${PORT}/api/products/getproduct?id=${req.query.id}`,
         method: 'GET',
     }).then(
         response => {
@@ -32,7 +37,7 @@ module.exports.updateProduct = function (req, res) {
     let data = req.body;
 
     axios({
-        url: `http://92.53.105.229:${config.config.PORT}/api/products/updateproduct`,
+        url: `${URL}:${PORT}/api/products/updateproduct`,
         method: 'post',
         data: data
     }).then(
@@ -57,7 +62,7 @@ module.exports.updateProduct = function (req, res) {
 module.exports.updateRatingProduct = function (req, res) {
 
     axios({
-        url: `http://92.53.105.229:${config.PORT}/api/products/getproduct?id=${req.body.id}`,
+        url: `${URL}:${PORT}/api/products/getproduct?id=${req.body.id}`,
     }).then(
         response => {
             return response.data;
@@ -78,7 +83,7 @@ module.exports.updateRatingProduct = function (req, res) {
             });
 
             return axios({
-                url: `http://92.53.105.229:${config.PORT}/api/products/updateproduct`,
+                url: `${URL}:${PORT}/api/products/updateproduct`,
                 method: 'post',
                 data: body
             })

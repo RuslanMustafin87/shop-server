@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const config = require('../../configs/configDB.json');
+const config = require('../../configs/config.json');
 
 mongoose.connect(`mongodb://${config.db.host}:${config.db.port}/${config.db.name}`, {
         useNewUrlParser: true,
