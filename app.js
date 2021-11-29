@@ -68,7 +68,7 @@ app.use('/api', apiRouter);
 
 
 
-app.listen(config.PORT, function () {
+app.listen(PORT, function () {
 
     log.info('server listening');
     console.log(`Запущено на порте ${PORT}`);
