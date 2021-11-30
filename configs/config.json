@@ -1,19 +1,13 @@
 {
-    
-    "testHttp": {
-        "URL": "http://localhost",
-        "PORT": 3007
-    },
     "http": {
-        "URL": "http://92.53.105.229",
+        "URL": "http://localhost",
         "PORT": 3000
     },
-        "db": {
-            "host": "localhost",
-            "port": "27017",
-            "name": "testShop",
-            "user": "",
-            "password": ""
-        }
+    "db": {
+        "host": "localhost",
+        "port": "27017",
+        "name": "testShop",
+        "user": "",
+        "password": ""
     }
-    
+}

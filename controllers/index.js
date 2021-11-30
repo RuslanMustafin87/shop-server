@@ -3,9 +3,6 @@ const axios = require('axios');
 const config = require('../configs/config.json');
 const PORT = config.http.PORT;
 const URL = config.http.URL;
-// const PORT = config.testHttp.PORT;
-// const URL = config.testHttp.URL;
-
 
 module.exports.getIndex = function (req, res) {
     

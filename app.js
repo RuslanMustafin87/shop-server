@@ -12,7 +12,6 @@ const MongoStore = require('connect-mongo')(session);
 
 const config = require('./configs/config.json');
 const PORT = config.http.PORT;
-// const PORT = config.testHttp.PORT;
 
 require('./api/models/db');
 

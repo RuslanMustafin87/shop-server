@@ -3,9 +3,6 @@ const axios = require('axios');
 const config = require('../configs/config.json');
 const PORT = config.http.PORT;
 const URL = config.http.URL;
-// const PORT = config.testHttp.PORT;
-// const URL = config.testHttp.URL;
-
 
 module.exports.getBasket = function (req, res) {
     res.render('basket.pug');
@@ -24,6 +21,10 @@ module.exports.getImages = async function (req, res) {
                 .then(
                     response => {
                         res(response.data);
+                    },
+                    err => {
+                        // console.log(err);
+                        rej(err);
                     }
                 )
         });
@@ -31,14 +32,21 @@ module.exports.getImages = async function (req, res) {
         productPromises.push(product);
     })
 
-    let products = await Promise.all(productPromises);
+    let products = [];
+
+    try {
+        products = await Promise.all(productPromises);
+    }  catch(err) {
+        console.log(err);
+    }
     
     products = products.map(function (product) {
-
-        product.image = product.images[0];
-        delete product.images;
-        return product;
+        if (product) {
+            product.image = product.images[0];
+            delete product.images;
+            return product;
+        }
     })
-    
+
     res.json(products);
 }
