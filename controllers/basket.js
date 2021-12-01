@@ -23,7 +23,6 @@ module.exports.getImages = async function (req, res) {
                         res(response.data);
                     },
                     err => {
-                        // console.log(err);
                         rej(err);
                     }
                 )
@@ -41,11 +40,9 @@ module.exports.getImages = async function (req, res) {
     }
     
     products = products.map(function (product) {
-        if (product) {
-            product.image = product.images[0];
-            delete product.images;
-            return product;
-        }
+        product.image = product.images[0];
+        delete product.images;
+        return product;
     })
 
     res.json(products);

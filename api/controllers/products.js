@@ -12,15 +12,10 @@ module.exports.getProducts = function (req, res) {
                 } else {
                     res.status(200).json(items);
                 }
-            },
-            err => {
-                console.log('Ошибка в БД ' + err.message);
-                res.status(404).json({message: `Ошибка в БД ${err.message}`});
-            }
-            )
+            },)
         .catch(
             err => {
-                console.log('Ошибка в БД ' + err.message);
+                console.error('Ошибка в БД ' + err.message);
                 res.status(404).json({message: `Ошибка в БД ${err.message}`});
             }
         )
