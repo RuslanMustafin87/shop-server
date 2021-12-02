@@ -12,13 +12,27 @@ module.exports.getProducts = function (req, res) {
                 } else {
                     res.status(200).json(items);
                 }
-            },)
+            }, )
         .catch(
             err => {
                 console.error('Ошибка в БД ' + err.message);
-                res.status(404).json({message: `Ошибка в БД ${err.message}`});
+                res.status(404).json({
+                    message: `Ошибка в БД ${err.message}`
+                });
             }
         )
+}
+
+class CustomError extends Error {
+    constructor(code, status, ...params){
+        super(...params)
+        if (Error.captureStackTrace) {
+            Error.captureStackTrace(this, CustomError);
+        }
+
+        this.code = code;
+        this.status = status;
+    }
 }
 
 module.exports.getOneProduct = function (req, res) {
@@ -29,12 +43,25 @@ module.exports.getOneProduct = function (req, res) {
         })
         .then(
             item => {
+                console.log(item);
+                if (!item) {
+                    throw new CustomError('generic', 404, 'Товар не найден');
+                }
                 res.status(200).json(item);
             },
+            // err => {
+            //     console.log('ko2');
+            //     console.log('Товар не найден ' + err.message);
+            //     res.status(404).json({
+            //         message: 'Товар не найден'
+            //     })
+            // }
+        )
+        .catch(
             err => {
-                console.log('Товар не найден ' + err.message);
+                console.log(err);
                 res.status(404).json({
-                    message: 'Товар не найден'
+                    message: err.message
                 })
             }
         )
