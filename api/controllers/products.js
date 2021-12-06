@@ -49,13 +49,6 @@ module.exports.getOneProduct = function (req, res) {
                 }
                 res.status(200).json(item);
             },
-            // err => {
-            //     console.log('ko2');
-            //     console.log('Товар не найден ' + err.message);
-            //     res.status(404).json({
-            //         message: 'Товар не найден'
-            //     })
-            // }
         )
         .catch(
             err => {
