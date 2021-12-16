@@ -1,7 +1,7 @@
 {
     "http": {
         "URL": "http://localhost",
-        "PORT": 3000
+        "PORT": 3007
     },
     "db": {
         "host": "localhost",

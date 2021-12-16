@@ -5,7 +5,7 @@ const PORT = config.http.PORT;
 const URL = config.http.URL;
 
 module.exports.getIndex = function (req, res) {
-    
+
     axios({
         url: `${URL}:${PORT}/api/index`,
         method: "get",

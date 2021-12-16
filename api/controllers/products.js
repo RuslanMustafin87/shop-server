@@ -43,7 +43,6 @@ module.exports.getOneProduct = function (req, res) {
         })
         .then(
             item => {
-                console.log(item);
                 if (!item) {
                     throw new CustomError('generic', 404, 'Товар не найден');
                 }

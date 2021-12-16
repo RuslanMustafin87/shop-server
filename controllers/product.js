@@ -41,7 +41,7 @@ module.exports.updateProduct = function (req, res) {
     }).then(
         response => {
 
-            console.log(response.data);
+            res.status(200).json(response.data.message);
 
         },
         err => {
@@ -67,7 +67,7 @@ module.exports.updateRatingProduct = function (req, res) {
         },
     ).then(
         data => {
-            
+
             let realRating = +((data.rating.realRating * data.rating.countOfVoters + req.body.rating) / (data.rating.countOfVoters + 1)).toFixed(2);
 
             let roundedRating = Math.round(realRating);
@@ -88,7 +88,6 @@ module.exports.updateRatingProduct = function (req, res) {
         },
     ).then(
         response => {
-            console.log(response.data.message);
             res.status(200).json(response.data);
         }
     ).catch(

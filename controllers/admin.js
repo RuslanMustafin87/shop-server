@@ -29,7 +29,7 @@ module.exports.addProduct = function (req, res) {
         for (let i = 0; i < imageFiles.length; i++) {
             const imageAsBuffer = new Promise(function (resolve, reject) {
                 const reader = new FileReader();
-                
+
                 reader.readAsArrayBuffer(imageFiles[i]);
 
                 reader.onload = function () {
@@ -53,12 +53,12 @@ module.exports.addProduct = function (req, res) {
             images: images,
             category: fields.category,
             rating: {
-                roundedRating: 0, 
+                roundedRating: 0,
                 realRating: 0,
                 countOfVoters: 0
             }
         }
-        
+
         axios({
             url: `${URL}:${PORT}/api/products/addproduct`,
             method: "post",
@@ -123,7 +123,6 @@ module.exports.updateProduct = function (req, res) {
         reader.readAsArrayBuffer(files.image);
 
         reader.onload = function () {
-            console.log(reader.result);
 
             update.image = reader.result;
 

@@ -29,6 +29,7 @@ var apiRouter = require('./api/router/router');
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
+// TODO сделать логгер
 app.use(cors({
     origin: '*',
     optionsSuccessStatus: 200
