@@ -6,17 +6,17 @@ const ordersSchema = mongoose.Schema({
         required: true
     },
     phone: {
-        type: Number,
+        type: String,
         required: true
     },
-    totalSumOfOrder: {
+    total: {
         type: Number,
         required: true,
     },
-    productList: {
-        type: Array,
-        required: true
-    },
+    // productList: {
+    //     type: Array,
+    //     required: true
+    // },
 });
 
 mongoose.model('orders', ordersSchema);

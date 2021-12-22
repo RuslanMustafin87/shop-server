@@ -1,27 +1,26 @@
 const mongoose = require('mongoose');
 
-module.exports.addProduct = function (req, res) {
-    const Product = mongoose.model('products');
-
-    let product = new Product({
-        name: req.body.name,
-        price: req.body.price,
-        images: req.body.images,
-        category: req.body.category,
-        rating: req.body.rating,
+module.exports.addOrder = function (req, res) {
+    const Order = mongoose.model('orders');
+    console.log('hih');
+    let order = new Order({
+        customer: req.body.name,
+        phone: req.body.phone,
+        total: req.body.total
     });
 
-    product.save()
+    order.save()
         .then(
             product => {
                 res.status(201).json({
-                    message: 'Товар добавлен'
-                });
-            },
-            err => {
-                res.status(404).json({
-                    message: 'Ошибка при добавлении товара'
+                    message: 'Заказ добавлен'
                 });
             }
-        );
+        )
+        .catch(
+            err => {
+                res.status(404).json({
+                    message: 'Ошибка при добавлении заказа'
+                });
+        })
 }
