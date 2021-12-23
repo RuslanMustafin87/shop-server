@@ -3,7 +3,9 @@ const mongoose = require('mongoose');
 module.exports.getProducts = function (req, res) {
     const Product = mongoose.model('products');
 
-    Product.find()
+    Product
+        .find()
+        .sort( {price: 1} )
         .then(
             items => {
 
@@ -26,9 +28,9 @@ module.exports.getProducts = function (req, res) {
 class CustomError extends Error {
     constructor(code, status, ...params){
         super(...params)
-        if (Error.captureStackTrace) {
-            Error.captureStackTrace(this, CustomError);
-        }
+        // if (Error.captureStackTrace) {
+        //     Error.captureStackTrace(this, CustomError);
+        // }
 
         this.code = code;
         this.status = status;
@@ -38,7 +40,8 @@ class CustomError extends Error {
 module.exports.getOneProduct = function (req, res) {
     const Product = mongoose.model('products');
 
-    Product.findOne({
+    Product
+        .findOne({
             _id: req.query.id
         })
         .then(
@@ -51,8 +54,8 @@ module.exports.getOneProduct = function (req, res) {
         )
         .catch(
             err => {
-                console.log(err);
-                res.status(404).json({
+                console.log( err.status, err.message);
+                res.status(err.status).json({
                     message: err.message
                 })
             }
@@ -70,7 +73,8 @@ module.exports.addProduct = function (req, res) {
         rating: req.body.rating,
     });
 
-    product.save()
+    product
+        .save()
         .then(
             product => {
                 res.status(201).json({
@@ -88,7 +92,8 @@ module.exports.addProduct = function (req, res) {
 module.exports.deleteProduct = function (req, res) {
     const Product = mongoose.model('products');
 
-    Product.findByIdAndDelete(req.query.id, (err) => {
+    Product
+        .findByIdAndDelete(req.query.id, (err) => {
         if (err) {
             res.status(404).json({
                 message: "Нет такого товара"
@@ -105,7 +110,8 @@ module.exports.deleteProduct = function (req, res) {
 module.exports.updateProduct = function (req, res) {
     const Product = mongoose.model('products');
 
-    Product.findByIdAndUpdate(req.body.id, req.body, (err) => {
+    Product
+        .findByIdAndUpdate(req.body.id, req.body, (err) => {
         if (err) {
             res.status(404).json({
                 message: 'Ошибка обновления продукта'

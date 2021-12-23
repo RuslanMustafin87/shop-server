@@ -4,7 +4,6 @@ block var
     - var title = 'Корзина'
     - var page = 'basket'
 block content
-    // TODO стилизовать
     main.main-basket
         .main-basket__wrapper
             button.main-basket__button-reset#button-reset Очистить корзину
@@ -18,7 +17,6 @@ block content
                         h1.product__name= item.name
                         span.product__price= item.price
                         button.product__button-delete Удалить
-            // TODO реализовать отправку заказа
             .main-basket__form-order
                 include ./blocks/form-order/form-order
             .main-basket__total.total

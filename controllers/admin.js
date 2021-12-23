@@ -21,7 +21,7 @@ module.exports.addProduct = function (req, res) {
         if (err) {
             return new Error('Ошибка чтения формы при добавлении товара ' + err.message);
         }
-
+        
         let imagesBuffer = [];
 
         let imageFiles = Object.values(files);

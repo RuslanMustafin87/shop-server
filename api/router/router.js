@@ -12,6 +12,6 @@ router.post('/products/addproduct', ctrlProducts.addProduct);
 router.delete('/products/deleteproduct', ctrlProducts.deleteProduct);
 router.post('/products/updateproduct', ctrlProducts.updateProduct);
 
-router.post('/orders', ctrlOrders.addOrder);
+router.post('/orders/addorder', ctrlOrders.addOrder);
 
 module.exports = router;

@@ -17,10 +17,17 @@ module.exports.getBasket = async function (req, res) {
             axios.get(`${URL}:${PORT}/api/products/getproduct?id=${item}`)
                 .then(
                     response => {
+                        if (response.status == 404) {
+                            throw new Error('Товар не найден')
+                        }
+                        console.log('ji');
                         res(response.data);
                     },
+                )
+                .catch(
                     err => {
-                        rej(err);
+                        console.log(err.message);
+                        res.status(404).json({message: err.message})
                     }
                 )
         });
