@@ -21,7 +21,7 @@ module.exports.addProduct = function (req, res) {
         if (err) {
             return new Error('Ошибка чтения формы при добавлении товара ' + err.message);
         }
-        
+
         let imagesBuffer = [];
 
         let imageFiles = Object.values(files);
@@ -47,9 +47,18 @@ module.exports.addProduct = function (req, res) {
 
         let images = await Promise.all(imagesBuffer)
 
+        let priceIntl = (+fields.price).toLocaleString('ru-RU', {
+            style: 'currency',
+            currency: 'RUB',
+            useGrouping: true,
+            maximumFractionDigits: 0,
+            minimumFractionDigits: 0
+        })
+
         let data = {
             name: fields.name,
             price: fields.price,
+            priceIntl: priceIntl,
             images: images,
             category: fields.category,
             rating: {
@@ -80,7 +89,7 @@ module.exports.addProduct = function (req, res) {
         )
     });
 };
-
+// переписать функцию
 module.exports.updateProduct = function (req, res) {
 
     const form = new formidable.IncomingForm({

@@ -30,32 +30,32 @@ module.exports.getProduct = function (req, res) {
 
 };
 
-module.exports.updateProduct = function (req, res) {
+// module.exports.updateProduct = function (req, res) {
 
-    let data = req.body;
+//     let data = req.body;
 
-    axios({
-        url: `${URL}:${PORT}/api/products/updateproduct`,
-        method: 'post',
-        data: data
-    }).then(
-        response => {
+//     axios({
+//         url: `${URL}:${PORT}/api/products/updateproduct`,
+//         method: 'post',
+//         data: data
+//     }).then(
+//         response => {
 
-            res.status(200).json(response.data.message);
+//             res.status(200).json(response.data.message);
 
-        },
-        err => {
-            console.log('Ошибка ' + err.message);
-            res.json(
-                err.response.data
-            )
-        }
-    ).catch(
-        err => {
-            console.log('Ошибка ' + err.message);
-        }
-    )
-}
+//         },
+//         err => {
+//             console.log('Ошибка ' + err.message);
+//             res.json(
+//                 err.response.data
+//             )
+//         }
+//     ).catch(
+//         err => {
+//             console.log('Ошибка ' + err.message);
+//         }
+//     )
+// }
 
 module.exports.updateRatingProduct = function (req, res) {
 

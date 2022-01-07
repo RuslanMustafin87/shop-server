@@ -40,7 +40,7 @@ class CustomError extends Error {
 // TODO обработа ошибок для поиска товара(для начала)
 module.exports.getOneProduct = function (req, res) {
     const Product = mongoose.model('products');
-
+    
     Product
         .findOne({
             _id: req.query.id
@@ -69,6 +69,7 @@ module.exports.addProduct = function (req, res) {
     let product = new Product({
         name: req.body.name,
         price: req.body.price,
+        priceIntl: req.body.priceIntl,
         images: req.body.images,
         category: req.body.category,
         rating: req.body.rating,

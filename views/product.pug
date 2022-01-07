@@ -8,7 +8,7 @@ block content
         .product__slider
             .my-slider#my-slider
         h1.product__name= name
-        p.product__price= price
+        p.product__price= priceIntl
         .product__rating
             - var ratingCheck = rating.roundedRating
             include ./blocks/rating-star/rating-star.pug
