@@ -37,6 +37,7 @@ class CustomError extends Error {
     }
 }
 
+// TODO обработа ошибок для поиска товара(для начала)
 module.exports.getOneProduct = function (req, res) {
     const Product = mongoose.model('products');
 

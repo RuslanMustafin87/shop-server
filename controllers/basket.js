@@ -1,4 +1,5 @@
 const axios = require('axios');
+const nodemailer = require('nodemailer');
 
 const config = require('../configs/config.json');
 const PORT = config.http.PORT;
@@ -6,52 +7,48 @@ const URL = config.http.URL;
 
 module.exports.getBasket = async function (req, res) {
 
-    let listIds = req.query;
-    console.log( listIds );
-    let listOfProductPromises = [];
+    // let listIds = req.query;
 
-    Object.values( listIds ).forEach(function (item, index) {
+    // let listOfProductPromises = [];
 
-        let productPromise = new Promise(function (res, rej) {
+    // Object.values( listIds ).forEach(function (item, index) {
 
-            axios.get(`${URL}:${PORT}/api/products/getproduct?id=${item}`)
-                .then(
-                    response => {
-                        if (response.status == 404) {
-                            throw new Error('Товар не найден')
-                        }
-                        console.log('ji');
-                        res(response.data);
-                    },
-                )
-                .catch(
-                    err => {
-                        console.log(err.message);
-                        res.status(404).json({message: err.message})
-                    }
-                )
-        });
+    //     let productPromise = new Promise(function (res, rej) {
 
-        listOfProductPromises.push( productPromise);
-    })
+    //         axios.get(`${URL}:${PORT}/api/products/getproduct?id=${item}`)
+    //             .then(
+    //                 response => {
+    //                     if (response.status == 404) {
+    //                         throw new Error('Товар не найден')
+    //                     }
 
-    let products = [];
+    //                     res(response.data);
+    //                 },
+    //             )
+    //             .catch(
+    //                 err => {
+    //                     console.log(err.message);
+    //                     res.status(404).json({message: err.message})
+    //                 }
+    //             )
+    //     });
 
-    try {
-        products = await Promise.all( listOfProductPromises );
-    }  catch(err) {
-        console.log(err);
-    }
+    //     listOfProductPromises.push( productPromise);
+    // })
 
-    if ( products.length > 0 ) {
-        console.log( products.length );
-    };
+    // let products = [];
 
-    res.render('basket.pug', {products: products});
+    // try {
+    //     products = await Promise.all( listOfProductPromises );
+    // }  catch(err) {
+    //     console.log(err);
+    // }
+
+    res.render('basket.pug');
 };
 
-module.exports.getImages = async function (req, res) {
-
+module.exports.getProducts = async function (req, res) {
+    
     let listIds = req.body;
     let productPromises = [];
 
@@ -88,4 +85,29 @@ module.exports.getImages = async function (req, res) {
     })
 
     res.json(products);
+}
+
+// TODO добавить отправку на почту
+
+module.exports.addOrder = async function (req, res) {
+    let testAccount = await nodemailer.createTestAccount();
+    console.log( testAccount);
+
+    let transporter = nodemailer.createTransport({
+        host: "smtp.ethereal.email",
+        port: 587,
+        secure: false, // true for 465, false for other ports
+        auth: {
+          user: testAccount.user, // generated ethereal user
+          pass: testAccount.pass, // generated ethereal password
+        },
+      });
+
+      let info = await transporter.sendMail({
+        from: '"Fred Foo 👻" <foo@example.com>', // sender address
+        to: "ruslanmust87@gmail.com", // list of receivers
+        subject: "Hello ✔", // Subject line
+        text: "Hello world?", // plain text body
+        html: "<b>Hello world?</b>", // html body
+      });
 }
