@@ -48,7 +48,7 @@ module.exports.getBasket = async function (req, res) {
 };
 
 module.exports.getProducts = async function (req, res) {
-    
+
     let listIds = req.body;
     let productPromises = [];
 
@@ -74,7 +74,7 @@ module.exports.getProducts = async function (req, res) {
 
     try {
         products = await Promise.all(productPromises);
-    }  catch(err) {
+    } catch (err) {
         console.log(err);
     }
 
@@ -91,23 +91,28 @@ module.exports.getProducts = async function (req, res) {
 
 module.exports.addOrder = async function (req, res) {
     let testAccount = await nodemailer.createTestAccount();
-    console.log( testAccount);
+    
+    axios.post(`${URL}:${PORT}/api/orders/addorder`, req.body)
+        .then(
+            response => res.json(response.data),
+            err => res.json(err.message)
+        )
 
     let transporter = nodemailer.createTransport({
         host: "smtp.ethereal.email",
         port: 587,
         secure: false, // true for 465, false for other ports
         auth: {
-          user: testAccount.user, // generated ethereal user
-          pass: testAccount.pass, // generated ethereal password
+            user: testAccount.user, // generated ethereal user
+            pass: testAccount.pass, // generated ethereal password
         },
-      });
+    });
 
-      let info = await transporter.sendMail({
+    let info = await transporter.sendMail({
         from: '"Fred Foo 👻" <foo@example.com>', // sender address
         to: "ruslanmust87@gmail.com", // list of receivers
         subject: "Hello ✔", // Subject line
         text: "Hello world?", // plain text body
         html: "<b>Hello world?</b>", // html body
-      });
+    });
 }

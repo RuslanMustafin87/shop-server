@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 module.exports.addOrder = function (req, res) {
     const Order = mongoose.model('orders');
-    console.log('hih');
+    console.log( req.body);
     let order = new Order({
         customer: req.body.name,
         phone: req.body.phone,
