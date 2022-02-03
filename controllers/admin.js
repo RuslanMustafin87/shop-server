@@ -37,7 +37,6 @@ module.exports.addProduct = function (req, res) {
                 }
 
                 reader.onerror = function () {
-                    console.log('Ошибка чтения файла ' + reader.error);
                     reject(reader.error);
                 }
             })
@@ -45,7 +44,14 @@ module.exports.addProduct = function (req, res) {
             imagesBuffer.push(imageAsBuffer);
         }
 
-        let images = await Promise.all(imagesBuffer)
+        let images;
+
+        try {
+            images = await Promise.all(imagesBuffer)
+        } catch (err) {
+            console.log('Ошибка чтения файла ' + err);
+            res.status(500).json({ message: `Ошибка чтения файла` });
+        }
 
         let priceIntl = (+fields.price).toLocaleString('ru-RU', {
             style: 'currency',
@@ -69,26 +75,24 @@ module.exports.addProduct = function (req, res) {
         }
 
         axios({
-            url: `${URL}:${PORT}/api/products/addproduct`,
-            method: "post",
-            data: data
-        }).then(
-            response => {
-                res.json(response.data);
-            },
-            err => {
-                console.log('Ошибка ' + err.message);
-                res.json(
-                    err.response.data
-                )
-            }
-        ).catch(
-            err => {
-                console.log('Ошибка ' + err.message);
-            }
-        )
+                url: `${URL}:${PORT}/api/products/addproduct`,
+                method: "post",
+                data: data
+            })
+            .then(
+                response => res.status(response.status).json(response.data)
+            )
+            .catch(
+                err => {
+                    console.log(`Ошибка ${err.status} ${err.message}`);
+                    res.status(err.status).json(
+                        err.response.data
+                    )
+                }
+            )
     });
 };
+
 // переписать функцию
 module.exports.updateProduct = function (req, res) {
 
@@ -101,28 +105,37 @@ module.exports.updateProduct = function (req, res) {
         let update = {};
 
         for (let item of Object.keys(fields)) {
-            if (fields[item] !== '' && fields[item] !== undefined) update[item] = fields[item];
+            if (fields[item] !== undefined) update[item] = fields[item];
         }
 
-        if (files.image.name == '') {
+        if ( fields.price){
+            let priceIntl = (+fields.price).toLocaleString('ru-RU', {
+                style: 'currency',
+                currency: 'RUB',
+                useGrouping: true,
+                maximumFractionDigits: 0,
+                minimumFractionDigits: 0
+            })
+
+            update.priceIntl = priceIntl;
+        }
+
+        if (files.image.name === '') {
 
             axios({
-                url: `${URL}:${PORT}/api/products/updateproduct`,
-                method: "post",
-                data: update
-            }).then(
-                response => {
-                    res.json(response.data);
-                },
-                err => {
-                    console.log('Ошибка ' + err.message);
-                    res.json(err.response.data)
-                }
-            ).catch(
-                err => {
-                    console.log('Ошибка ' + err.message);
-                }
-            )
+                    url: `${URL}:${PORT}/api/products/updateproduct`,
+                    method: "post",
+                    data: update
+                })
+                .then(
+                    response => res.status(response.status).json(response.data)
+                )
+                .catch(
+                    err => {
+                        console.log(err.response.data.message + ' ' + err.response.status);
+                        res.status(err.response.status).json(err.response.data);
+                    }
+                )
 
             return;
         }
@@ -133,23 +146,20 @@ module.exports.updateProduct = function (req, res) {
 
         reader.onload = function () {
 
-            update.image = reader.result;
+            update.images = reader.result;
 
             axios({
                 url: `${URL}:${PORT}/api/products/updateproduct`,
                 method: "post",
                 data: update
-            }).then(
-                response => {
-                    res.json(response.data);
-                },
+            })
+            .then(
+                response => res.status(response.status).json(response.data)
+                )
+            .catch(
                 err => {
-                    console.log('Ошибка ' + err.message);
-                    res.json(err.response.data)
-                }
-            ).catch(
-                err => {
-                    console.log('Ошибка ' + err.message);
+                    console.log(err.response.data.message + ' ' + err.response.status);
+                    res.status(err.response.status).json(err.response.data);
                 }
             )
         };

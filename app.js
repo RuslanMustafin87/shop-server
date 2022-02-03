@@ -64,8 +64,6 @@ app.use('/home', function(req, res, next){
 app.use('/', router);
 app.use('/api', apiRouter);
 
-
-
 app.listen(PORT, function () {
 
     log.info('server listening');

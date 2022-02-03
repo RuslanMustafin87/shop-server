@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 const config = require('../../configs/config.json');
 
-const dbUrl = 'mongodb+srv://Ruslan:170997koT@cluster0.dj8aq.mongodb.net/YourFurniture?retryWrites=true&w=majority';
-// const dbUrl = `mongodb://${config.db.host}:${config.db.port}/${config.db.name}`;
+// const dbUrl = 'mongodb+srv://Ruslan:170997koT@cluster0.dj8aq.mongodb.net/YourFurniture?retryWrites=true&w=majority';
+const dbUrl = `mongodb://${config.db.host}:${config.db.port}/${config.db.name}`;
 
 mongoose.connect(dbUrl, {
         useNewUrlParser: true,

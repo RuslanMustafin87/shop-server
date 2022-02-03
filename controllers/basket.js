@@ -58,12 +58,8 @@ module.exports.getProducts = async function (req, res) {
 
             axios.get(`${URL}:${PORT}/api/products/getproduct?id=${item.id}`)
                 .then(
-                    response => {
-                        res(response.data);
-                    },
-                    err => {
-                        rej(err);
-                    }
+                    response => res(response.data),
+                    err => rej(err)
                 )
         });
 
@@ -87,32 +83,32 @@ module.exports.getProducts = async function (req, res) {
     res.json(products);
 }
 
-// TODO добавить отправку на почту
-
 module.exports.addOrder = async function (req, res) {
     let testAccount = await nodemailer.createTestAccount();
-    
+
     axios.post(`${URL}:${PORT}/api/orders/addorder`, req.body)
         .then(
-            response => res.json(response.data),
-            err => res.json(err.message)
+            response => res.json(response.data)
+        )
+        .catch(
+            err => res.status(500).json(err.response.data)
         )
 
     let transporter = nodemailer.createTransport({
-        host: "smtp.ethereal.email",
-        port: 587,
-        secure: false, // true for 465, false for other ports
+        service: 'gmail',
+        host: "smtp.gmail.com",
+        port: 465,
+        secure: true, // true for 465, false for other ports
         auth: {
-            user: testAccount.user, // generated ethereal user
-            pass: testAccount.pass, // generated ethereal password
+            user: 'rostislavmustafin87@gmail.com', // generated ethereal user
+            pass: 'jWYeCCr77hD3', // generated ethereal password
         },
     });
 
     let info = await transporter.sendMail({
-        from: '"Fred Foo 👻" <foo@example.com>', // sender address
+        from: "Fred Foo 👻" , // sender address
         to: "ruslanmust87@gmail.com", // list of receivers
         subject: "Hello ✔", // Subject line
         text: "Hello world?", // plain text body
-        html: "<b>Hello world?</b>", // html body
     });
 }

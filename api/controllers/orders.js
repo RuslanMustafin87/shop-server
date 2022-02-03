@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 module.exports.addOrder = function (req, res) {
     const Order = mongoose.model('orders');
-    console.log( req.body);
+
     let order = new Order({
         customer: req.body.name,
         phone: req.body.phone,
@@ -16,7 +16,7 @@ module.exports.addOrder = function (req, res) {
         )
         .catch(
             err => {
-                res.status(404).json({
+                res.status(500).json({
                     message: 'Ошибка при добавлении заказа'
                 });
             })
