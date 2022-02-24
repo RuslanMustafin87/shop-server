@@ -3,9 +3,9 @@ const mongoose = require('mongoose');
 class ProductError extends Error {
     constructor(code, status, ...params) {
         super(...params)
-        // if (Error.captureStackTrace) {
-        //     Error.captureStackTrace(this, CustomError);
-        // }
+        if (Error.captureStackTrace) {
+            Error.captureStackTrace(this, CustomError);
+        }
 
         this.code = code;
         this.status = status;

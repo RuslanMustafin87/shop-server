@@ -7,7 +7,8 @@ const dbUrl = `mongodb://${config.db.host}:${config.db.port}/${config.db.name}`;
 mongoose.connect(dbUrl, {
         useNewUrlParser: true,
         useFindAndModify: false,
-        useUnifiedTopology: true
+        useUnifiedTopology: true,
+        useCreateIndex: true
     })
     .then(
         () => {
@@ -47,3 +48,4 @@ process.on('SIGINT', () => {
 
 require('./products');
 require('./orders');
+require('./users')

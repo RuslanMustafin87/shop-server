@@ -93,7 +93,7 @@ module.exports.addOrder = async function (req, res) {
         .catch(
             err => res.status(500).json(err.response.data)
         )
-
+    // TODO исправить отправку письма, крашит сервер
     let transporter = nodemailer.createTransport({
         service: 'gmail',
         host: "smtp.gmail.com",

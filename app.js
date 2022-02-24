@@ -3,7 +3,7 @@ const app = express();
 const path = require('path');
 const fs = require('fs');
 const cors = require('cors');
-//const cookieParser = require('cookie-parser');
+const cookieParser = require('cookie-parser');
 const bunyan = require('bunyan');
 const flash = require('connect-flash');
 const session = require('express-session');
@@ -30,6 +30,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
 // TODO сделать логгер
+// TODO подключить dotoenv чтоб шифровать данные
 app.use(cors({
     origin: '*',
     optionsSuccessStatus: 200
@@ -41,18 +42,22 @@ app.use(express.urlencoded({
     extended: false,
     limit: '50mb'
 }));
+app.use(cookieParser('qwe'));
 app.use(session({
     secret: '170997',
     saveUninitialized: false,
     resave: false,
     store: new MongoStore({mongooseConnection: mongoose.connection}),
     cookie: {
-        signed: true
+        signed: true,
+        path: '/',
+        httpOnly: true,
+        maxAge: null
     }
 }));
 app.use(flash());
-//app.use(cookieParser('qwe'));
 app.use(express.static(path.join(__dirname, 'public')));
+
 app.use('/home', function(req, res, next){
     if (!req.session.isAdmin === true) {
         res.redirect('/');

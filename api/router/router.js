@@ -3,6 +3,7 @@ const router = express.Router();
 
 const ctrlProducts = require('../controllers/products');
 const ctrlOrders = require('../controllers/orders');
+const ctrlUsers = require('../controllers/users');
 
 router.get('/index', ctrlProducts.getProducts);
 
@@ -13,5 +14,8 @@ router.delete('/products/deleteproduct', ctrlProducts.deleteProduct);
 router.post('/products/updateproduct', ctrlProducts.updateProduct);
 
 router.post('/orders/addorder', ctrlOrders.addOrder);
+
+router.post('/users/adduser', ctrlUsers.addUser);
+router.post('/users/validuser', ctrlUsers.validUser);
 
 module.exports = router;
