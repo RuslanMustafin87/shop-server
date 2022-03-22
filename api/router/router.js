@@ -11,11 +11,11 @@ router.get('/products', ctrlProducts.getProducts);
 router.get('/products/getproduct', ctrlProducts.getOneProduct);
 router.post('/products/addproduct', ctrlProducts.addProduct);
 router.delete('/products/deleteproduct', ctrlProducts.deleteProduct);
-router.post('/products/updateproduct', ctrlProducts.updateProduct);
+router.put('/products/updateproduct', ctrlProducts.updateProduct);
 
 router.post('/orders/addorder', ctrlOrders.addOrder);
-
 router.post('/users/adduser', ctrlUsers.addUser);
+
 router.post('/users/validuser', ctrlUsers.validUser);
 
 module.exports = router;

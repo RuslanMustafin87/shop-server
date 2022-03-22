@@ -5,6 +5,7 @@ const ctrlIndex = require('../controllers/index');
 const ctrlProduct = require('../controllers/product');
 const ctrlBasket = require('../controllers/basket');
 const ctrlAdmin = require('../controllers/admin');
+const ctrlUsers = require('../controllers/users');
 
 router.get('/', ctrlIndex.getIndex);
 
@@ -18,6 +19,8 @@ router.post('/basket/addorder', ctrlBasket.addOrder);
 
 router.get('/admin', ctrlAdmin.getAdmin);
 router.post('/admin/addproduct', ctrlAdmin.addProduct);
-router.post('/admin/updateproduct', ctrlAdmin.updateProduct);
+router.put('/admin/updateproduct', ctrlAdmin.updateProduct);
+
+router.post('/users/validuser', ctrlUsers.validUser);
 
 module.exports = router;

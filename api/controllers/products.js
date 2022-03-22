@@ -28,7 +28,7 @@ module.exports.getProducts = function (req, res) {
         .catch(
             err => {
                 if (err instanceof ProductError) {
-                    return res.status(404).json({
+                    return res.status(err.status).json({
                         message: err.message
                     });
                 }

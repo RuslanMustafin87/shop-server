@@ -1,4 +1,7 @@
+
 const mongoose = require('mongoose');
+
+
 const config = require('../../configs/config.json');
 
 // const dbUrl = 'mongodb+srv://Ruslan:170997koT@cluster0.dj8aq.mongodb.net/YourFurniture?retryWrites=true&w=majority';

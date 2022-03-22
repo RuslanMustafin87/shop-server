@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const formidable = require('formidable');
 
 class UserError extends Error {
     constructor(code, status, ...params) {
@@ -22,10 +23,12 @@ module.exports.addUser = function (req, res) {
     user.setPassword(req.body.password);
 
     User
-        .findOne({login: req.body.login})
+        .findOne({
+            login: req.body.login
+        })
         .then(
-            user => {
-                if (user) throw new UserError('generic', 500, 'Такой пользователь уже существует');
+            result => {
+                if (result) throw new UserError('generic', 500, 'Такой пользователь уже существует');
                 return user.save()
             }
         )
@@ -50,17 +53,19 @@ module.exports.addUser = function (req, res) {
         )
 }
 
-module.exports.validUser = function(req, res){
+module.exports.validUser = function (req, res) {
     const User = mongoose.model('users');
-
+    
     User
-        .findOne({login: req.body.login})
+        .findOne({
+            login: req.body.login
+        })
         .then(
             user => {
                 if (!user) throw new UserError('generic', 404, 'Пользователя не существует');
-                if (!user.validPassword(req.body.password)) throw new UserError('generic', 401, 'Не верный пароль');
+                if (!user.validPassword(req.body.password)) throw new UserError('generic', 401, 'Неверный пароль');
 
-                res.status(200).send('yes');
+                res.status(200).end();
             }
         )
         .catch(
@@ -75,4 +80,5 @@ module.exports.validUser = function(req, res){
                 });
             }
         )
+
 }

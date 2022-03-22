@@ -93,7 +93,7 @@ module.exports.addProduct = function (req, res) {
     });
 };
 
-// переписать функцию
+// TODO переписать функцию
 module.exports.updateProduct = function (req, res) {
 
     const form = new formidable.IncomingForm({
@@ -124,7 +124,7 @@ module.exports.updateProduct = function (req, res) {
 
             axios({
                     url: `${URL}:${PORT}/api/products/updateproduct`,
-                    method: "post",
+                    method: "put",
                     data: update
                 })
                 .then(
