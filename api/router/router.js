@@ -5,7 +5,7 @@ const ctrlProducts = require('../controllers/products');
 const ctrlOrders = require('../controllers/orders');
 const ctrlUsers = require('../controllers/users');
 
-router.get('/index', ctrlProducts.getProducts);
+// router.get('/index', ctrlProducts.getProducts);
 
 router.get('/products', ctrlProducts.getProducts);
 router.get('/products/getproduct', ctrlProducts.getOneProduct);
@@ -14,8 +14,8 @@ router.delete('/products/deleteproduct', ctrlProducts.deleteProduct);
 router.put('/products/updateproduct', ctrlProducts.updateProduct);
 
 router.post('/orders/addorder', ctrlOrders.addOrder);
-router.post('/users/adduser', ctrlUsers.addUser);
 
+router.post('/users/adduser', ctrlUsers.addUser);
 router.post('/users/validuser', ctrlUsers.validUser);
 
 module.exports = router;

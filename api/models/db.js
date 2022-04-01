@@ -51,4 +51,5 @@ process.on('SIGINT', () => {
 
 require('./products');
 require('./orders');
-require('./users')
+require('./users');
+require('./furnitures');

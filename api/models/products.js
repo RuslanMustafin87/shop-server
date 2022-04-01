@@ -17,8 +17,9 @@ const productsSchema = mongoose.Schema({
         type: [Buffer],
     },
     category: {
-        type: String,
-        required: true
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: 'furnitures'
     },
     rating: {
         type: Object

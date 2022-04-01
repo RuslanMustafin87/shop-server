@@ -17,18 +17,19 @@ module.exports.addUser = function (req, res) {
     const User = mongoose.model('users');
 
     let user = new User({
-        login: req.body.login,
+        name: req.body.name,
+        email: req.body.email
     });
 
     user.setPassword(req.body.password);
 
     User
         .findOne({
-            login: req.body.login
+            email: req.body.email
         })
         .then(
             result => {
-                if (result) throw new UserError('generic', 500, 'Такой пользователь уже существует');
+                if (result) throw new UserError('generic', 401, 'Пользователь с таким email уже существует');
                 return user.save()
             }
         )
@@ -55,10 +56,10 @@ module.exports.addUser = function (req, res) {
 
 module.exports.validUser = function (req, res) {
     const User = mongoose.model('users');
-    
+
     User
         .findOne({
-            login: req.body.login
+            email: req.body.email
         })
         .then(
             user => {

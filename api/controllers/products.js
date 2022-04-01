@@ -20,10 +20,12 @@ module.exports.getProducts = function (req, res) {
         .sort({
             price: 1
         })
+        // .populate('category')
+        // .exec()
         .then(
             products => {
                 if (!products.length) throw new ProductError('generic', 404, 'Данные не найдены');
-                res.status(201).json(products);
+                res.status(200).json(products);
             }, )
         .catch(
             err => {
@@ -42,19 +44,26 @@ module.exports.getProducts = function (req, res) {
 // TODO обработа ошибок для поиска товара(для начала)
 module.exports.getOneProduct = function (req, res) {
     const Product = mongoose.model('products');
-
+    console.log( req.query.id );
     Product
         .findOne({
             _id: req.query.id
         })
+        // .populate('category')
         .then(
             product => {
-                if (!product) throw new ProductError('generic', 404, 'Товар не найден');
+                console.log( product );
+                // if (!product) throw new ProductError('generic', 404, 'Товар не найден');
                 res.status(200).json(product);
             },
+            err => {
+                console.log( 'ji' );
+                throw new ProductError('generic', 404, 'Товар не найден');
+            }
         )
         .catch(
             err => {
+                console.log( err instanceof ProductError );
                 if (err instanceof ProductError) {
                     return res.status(err.status).json({
                         message: err.message
@@ -70,18 +79,32 @@ module.exports.getOneProduct = function (req, res) {
 
 module.exports.addProduct = function (req, res) {
     const Product = mongoose.model('products');
+    const Furniture = mongoose.model('furnitures');
 
-    let product = new Product({
-        name: req.body.name,
-        price: req.body.price,
-        priceIntl: req.body.priceIntl,
-        images: req.body.images,
-        category: req.body.category,
-        rating: req.body.rating,
-    });
+    // let product = new Product({
+    //     name: req.body.name,
+    //     price: req.body.price,
+    //     priceIntl: req.body.priceIntl,
+    //     images: req.body.images,
+    //     // category: req.body.category,
+    //     rating: req.body.rating,
+    // });
 
-    product
-        .save()
+    Furniture
+        .findOne({furniture: req.body.category})
+        .then(
+            furniture => {
+                let product = new Product({
+                    name: req.body.name,
+                    price: req.body.price,
+                    priceIntl: req.body.priceIntl,
+                    images: req.body.images,
+                    category: furniture._id,
+                    rating: req.body.rating,
+                });
+                return product.save()
+            }
+        )
         .then(
             product => {
                 res.status(201).json({
@@ -131,7 +154,6 @@ module.exports.updateProduct = function (req, res) {
         .findByIdAndUpdate(req.body.id, req.body)
         .then(
             product => {
-                // console.log(product);
                 if (!product) throw new ProductError('generic', 404, 'Товар не найден');
                 res.status(201).json({
                     message: 'Товар обновлен'

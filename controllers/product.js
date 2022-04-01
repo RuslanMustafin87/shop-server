@@ -16,7 +16,7 @@ module.exports.getProduct = function (req, res) {
         err => {
             console.log('Ошибка в данных ' + err.message);
             res.render('error.pug', {
-                message: `${err.response.data.message} ${err.message}`
+                message: `${err.response.data.message}`
             });
         }
     )
@@ -33,7 +33,6 @@ module.exports.updateRatingProduct = function (req, res) {
         },
     ).then(
         data => {
-
             let realRating = +((data.rating.realRating * data.rating.countOfVoters + req.body.rating) / (data.rating.countOfVoters + 1)).toFixed(2);
 
             let roundedRating = Math.round(realRating);
@@ -48,20 +47,17 @@ module.exports.updateRatingProduct = function (req, res) {
 
             return axios({
                 url: `${URL}:${PORT}/api/products/updateproduct`,
-                method: 'post',
+                method: 'put',
                 data: body
             })
         },
     ).then(
-        response => {
-            res.status(200).json(response.data);
-        }
+        response => res.status(200).json(response.data)
     ).catch(
         err => {
+            // TODO пробросить ошибку или нет если путь не доступен
             console.log('Ошибка ' + err.message);
-            // res.json(
-            //     err.response.data
-            // )
+            res.status(500).json(err.response.data);
         }
     )
 }

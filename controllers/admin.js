@@ -91,7 +91,7 @@ module.exports.addProduct = function (req, res) {
                 }
             )
     });
-};
+}; 
 
 // TODO переписать функцию
 module.exports.updateProduct = function (req, res) {
