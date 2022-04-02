@@ -15,7 +15,9 @@ html(lang="en")
     body
         .wrapper
             include ../blocks/header/header
-            block content
+            main.main
+                block content
+                include ../blocks/menu/menu
             include ../blocks/footer/footer
             include ../blocks/myLogin/mylogin
             include ../blocks/mySign/mySign

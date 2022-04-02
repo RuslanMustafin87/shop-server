@@ -4,7 +4,7 @@ class ProductError extends Error {
     constructor(code, status, ...params) {
         super(...params)
         if (Error.captureStackTrace) {
-            Error.captureStackTrace(this, CustomError);
+            Error.captureStackTrace(this, ProductError);
         }
 
         this.code = code;
@@ -44,7 +44,7 @@ module.exports.getProducts = function (req, res) {
 // TODO обработа ошибок для поиска товара(для начала)
 module.exports.getOneProduct = function (req, res) {
     const Product = mongoose.model('products');
-    console.log( req.query.id );
+
     Product
         .findOne({
             _id: req.query.id
@@ -52,18 +52,15 @@ module.exports.getOneProduct = function (req, res) {
         // .populate('category')
         .then(
             product => {
-                console.log( product );
-                // if (!product) throw new ProductError('generic', 404, 'Товар не найден');
+                if (!product) throw new ProductError('generic', 404, 'Товар не найден');
                 res.status(200).json(product);
             },
             err => {
-                console.log( 'ji' );
                 throw new ProductError('generic', 404, 'Товар не найден');
             }
         )
         .catch(
             err => {
-                console.log( err instanceof ProductError );
                 if (err instanceof ProductError) {
                     return res.status(err.status).json({
                         message: err.message
@@ -132,6 +129,9 @@ module.exports.deleteProduct = function (req, res) {
                 res.status(201).json({
                     message: 'Товар удален'
                 });
+            },
+            err => {
+                throw new ProductError('generic', 404, 'Товар не найден');
             }
         )
         .catch(
@@ -158,6 +158,9 @@ module.exports.updateProduct = function (req, res) {
                 res.status(201).json({
                     message: 'Товар обновлен'
                 });
+            },
+            err => {
+                throw new ProductError('generic', 404, 'Товар не найден');
             }
         )
         .catch(

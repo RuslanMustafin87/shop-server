@@ -65,7 +65,6 @@ module.exports.validUser = function (req, res) {
             user => {
                 if (!user) throw new UserError('generic', 404, 'Пользователя не существует');
                 if (!user.validPassword(req.body.password)) throw new UserError('generic', 401, 'Неверный пароль');
-
                 res.status(200).end();
             }
         )

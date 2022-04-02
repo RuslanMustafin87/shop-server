@@ -12,7 +12,7 @@ module.exports.addUser = function (req, res) {
 
     if ( !validErrors.isEmpty() ) {
         let errStr = validErrors.array({ onlyFirstError: true }).map( ( err ) => err.msg ).join(' ');
-        return res.status(400).redirect(`/?msg=${errStr}`);
+        return res.status(400).redirect(`/?msgSign=${errStr}`);
     }
 
     axios({
@@ -32,7 +32,7 @@ module.exports.addUser = function (req, res) {
         .catch(
             err => {
                 console.log('Ошибка!' + err.message);
-                res.status(err.response.status).redirect(`/?msg=${err.response.data.message}`);
+                res.status(err.response.status).redirect(`/?msgSign=${err.response.data.message}`);
             }
         )
 }
@@ -55,7 +55,7 @@ module.exports.validUser = function (req, res) {
         .catch(
             err => {
                 console.log('Ошибка! ' + err.message);
-                res.redirect(`/?msg=${err.response.data.message}`);
+                res.redirect(`/?msgLogin=${err.response.data.message}`);
             }
         )
 }

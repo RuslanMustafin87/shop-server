@@ -21,7 +21,7 @@ module.exports.getIndex = function (req, res) {
         err => {
             console.log('Ошибка ' + err.message);
             res.render('error.pug', {
-                message: `${err.response.data.message} ${err.code}`
+                message: `${err.response.data.message}`
             });
         }
     )
