@@ -11,6 +11,31 @@ module.exports.getAdmin = function (req, res) {
     res.render('admin.pug');
 };
 
+module.exports.authAdmin = async function (req, res) {
+    let data = {};
+
+    try {
+        let response = await axios({
+            url: `${URL}:${PORT}/api/users/authuser`,
+            method: "post",
+            data: {
+                email: req.body.email,
+                password: req.body.password
+            }
+        })
+
+        if ( !response.data.role === 'admin' ) throw new Error('Доступ запрещен');
+
+        data.userName = response.data.name
+        res.render('basket.pug', data);
+    } catch (err) {
+        if (err.response.status === 500) return res.status( err.response.status ).render('error.pug', `/?msgLoginError=${err.response.data.message}`);
+        res.status( 403 ).redirect(`/?msgLoginError=Доступ зарещен`);
+    }
+
+};
+
+
 module.exports.addProduct = function (req, res) {
 
     const form = new formidable.IncomingForm({
@@ -91,7 +116,7 @@ module.exports.addProduct = function (req, res) {
                 }
             )
     });
-}; 
+};
 
 // TODO переписать функцию
 module.exports.updateProduct = function (req, res) {

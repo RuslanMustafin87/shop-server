@@ -16,6 +16,6 @@ router.put('/products/updateproduct', ctrlProducts.updateProduct);
 router.post('/orders/addorder', ctrlOrders.addOrder);
 
 router.post('/users/adduser', ctrlUsers.addUser);
-router.post('/users/validuser', ctrlUsers.validUser);
+router.post('/users/authuser', ctrlUsers.authUser);
 
 module.exports = router;

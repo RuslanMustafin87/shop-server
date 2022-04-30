@@ -54,18 +54,20 @@ module.exports.addUser = function (req, res) {
         )
 }
 
-module.exports.validUser = function (req, res) {
+module.exports.authUser = function (req, res) {
     const User = mongoose.model('users');
-
     User
-        .findOne({
-            email: req.body.email
-        })
-        .then(
-            user => {
-                if (!user) throw new UserError('generic', 404, 'Пользователя не существует');
-                if (!user.validPassword(req.body.password)) throw new UserError('generic', 401, 'Неверный пароль');
-                res.status(200).end();
+    .findOne({
+        email: req.body.email
+    })
+    .then(
+        user => {
+            if (!user) throw new UserError('generic', 404, 'Пользователя не существует');
+            if (!user.validPassword(req.body.password)) throw new UserError('generic', 401, 'Неверный пароль');
+            res.status(200).json({name: user.name});
+        },
+        err => {
+                throw new UserError('generic', 404, 'Пользователя не существует');
             }
         )
         .catch(

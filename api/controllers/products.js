@@ -41,7 +41,6 @@ module.exports.getProducts = function (req, res) {
         )
 }
 
-// TODO обработа ошибок для поиска товара(для начала)
 module.exports.getOneProduct = function (req, res) {
     const Product = mongoose.model('products');
 
@@ -149,7 +148,7 @@ module.exports.deleteProduct = function (req, res) {
 
 module.exports.updateProduct = function (req, res) {
     const Product = mongoose.model('products');
-    console.log(req.body.id);
+
     Product
         .findByIdAndUpdate(req.body.id, req.body)
         .then(

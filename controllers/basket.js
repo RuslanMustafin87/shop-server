@@ -6,45 +6,30 @@ const PORT = config.http.PORT;
 const URL = config.http.URL;
 
 module.exports.getBasket = async function (req, res) {
-
-    // let listIds = req.query;
-
-    // let listOfProductPromises = [];
-
-    // Object.values( listIds ).forEach(function (item, index) {
-
-    //     let productPromise = new Promise(function (res, rej) {
-
-    //         axios.get(`${URL}:${PORT}/api/products/getproduct?id=${item}`)
-    //             .then(
-    //                 response => {
-    //                     if (response.status == 404) {
-    //                         throw new Error('Товар не найден')
-    //                     }
-
-    //                     res(response.data);
-    //                 },
-    //             )
-    //             .catch(
-    //                 err => {
-    //                     console.log(err.message);
-    //                     res.status(404).json({message: err.message})
-    //                 }
-    //             )
-    //     });
-
-    //     listOfProductPromises.push( productPromise);
-    // })
-
-    // let products = [];
-
-    // try {
-    //     products = await Promise.all( listOfProductPromises );
-    // }  catch(err) {
-    //     console.log(err);
-    // }
-
     res.render('basket.pug');
+};
+
+module.exports.authUser = async function (req, res) {
+    let data = {};
+
+    try {
+        let response = await axios({
+            url: `${URL}:${PORT}/api/users/authuser`,
+            method: "post",
+            data: {
+                email: req.body.email,
+                password: req.body.password
+            }
+        })
+
+        data.userName = response.data.name
+
+        res.render('basket.pug', data);
+
+    } catch (err) {
+        return res.status( err.response.status ).redirect(`/basket?msgLoginError=${err.response.data.message}`)
+    }
+
 };
 
 module.exports.getProducts = async function (req, res) {

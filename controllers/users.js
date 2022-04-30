@@ -12,7 +12,7 @@ module.exports.addUser = function (req, res) {
 
     if ( !validErrors.isEmpty() ) {
         let errStr = validErrors.array({ onlyFirstError: true }).map( ( err ) => err.msg ).join(' ');
-        return res.status(400).redirect(`/?msgSign=${errStr}`);
+        return res.status(400).redirect(`/?msgSignError=${errStr}`);
     }
 
     axios({
@@ -26,36 +26,48 @@ module.exports.addUser = function (req, res) {
         })
         .then(
             response => {
-                res.status( response.status ).redirect('/')
+                res.status( response.status ).redirect(`/?msgSignSuccessfully=${response.data.message}`)
             }
         )
         .catch(
             err => {
                 console.log('Ошибка!' + err.message);
-                res.status(err.response.status).redirect(`/?msgSign=${err.response.data.message}`);
+                res.status(err.response.status).redirect(`/?msgSignError=${err.response.data.message}`);
             }
         )
 }
 
-module.exports.validUser = function (req, res) {
+// module.exports.authUser = async function (req, res) {
+//     let data = {
+//         products: null,
+//         userName: null
+//     }
 
-    axios({
-            url: `${URL}:${PORT}/api/users/validuser`,
-            method: "post",
-            data: {
-                email: req.body.email,
-                password: req.body.password
-            }
-        })
-        .then(
-            response => {
-                res.redirect('/admin');
-            }
-        )
-        .catch(
-            err => {
-                console.log('Ошибка! ' + err.message);
-                res.redirect(`/?msgLogin=${err.response.data.message}`);
-            }
-        )
-}
+//     try {
+//         let response = await axios({
+//             url: `${URL}:${PORT}/api/users/authuser`,
+//             method: "post",
+//             data: {
+//                 email: req.body.email,
+//                 password: req.body.password
+//             }
+//         })
+//         data.userName = response.data.name
+//     } catch (err) {
+//         return res.status( err.response.status ).redirect(`/?msgLoginError=${err.response.data.message}`)
+//     }
+
+//     try {
+//         let response = await axios({
+//             url: `${URL}:${PORT}/api/products`,
+//             method: "get",
+//         })
+//         data.products = response.data
+//     } catch (err) {
+//         return res.render('error.pug', {
+//             message: `${err.response.data.message}`
+//         });
+//     }
+
+//     res.render('index.pug', data);
+// };
