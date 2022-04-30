@@ -45,8 +45,9 @@
 	}
 
 	&__user-name {
+		display: table-cell;
+		vertical-align: middle;
 		@extend .menu-nav__sign;
-		color: var(--color-text-light);
 	}
 
 

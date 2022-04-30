@@ -7,12 +7,14 @@ const config = require('../configs/config.json');
 const PORT = config.http.PORT;
 const URL = config.http.URL;
 
+
 module.exports.getAdmin = function (req, res) {
     res.render('admin.pug');
 };
 
 module.exports.authAdmin = async function (req, res) {
-    let data = {};
+
+    // if ( req.session.isAdmin) res.render('admin.pug');
 
     try {
         let response = await axios({
@@ -24,13 +26,17 @@ module.exports.authAdmin = async function (req, res) {
             }
         })
 
-        if ( !response.data.role === 'admin' ) throw new Error('Доступ запрещен');
+        if (response.data.role === 'user') {
+            throw new Error('Доступ запрещен');
+        }
 
-        data.userName = response.data.name
-        res.render('basket.pug', data);
+        req.session.isAdmin = true;
+        res.render('admin.pug');
     } catch (err) {
-        if (err.response.status === 500) return res.status( err.response.status ).render('error.pug', `/?msgLoginError=${err.response.data.message}`);
-        res.status( 403 ).redirect(`/?msgLoginError=Доступ зарещен`);
+        if (err.response && err.response.status === 500) {
+            return res.status(err.response.status).render('error.pug', err.response.data);
+        }
+        res.status(403).redirect(`/?msgLoginAdminError=Доступ запрещен`);
     }
 
 };
@@ -75,7 +81,9 @@ module.exports.addProduct = function (req, res) {
             images = await Promise.all(imagesBuffer)
         } catch (err) {
             console.log('Ошибка чтения файла ' + err);
-            res.status(500).json({ message: `Ошибка чтения файла` });
+            res.status(500).json({
+                message: `Ошибка чтения файла`
+            });
         }
 
         let priceIntl = (+fields.price).toLocaleString('ru-RU', {
@@ -133,7 +141,7 @@ module.exports.updateProduct = function (req, res) {
             if (fields[item] !== undefined) update[item] = fields[item];
         }
 
-        if ( fields.price){
+        if (fields.price) {
             let priceIntl = (+fields.price).toLocaleString('ru-RU', {
                 style: 'currency',
                 currency: 'RUB',
@@ -174,19 +182,19 @@ module.exports.updateProduct = function (req, res) {
             update.images = reader.result;
 
             axios({
-                url: `${URL}:${PORT}/api/products/updateproduct`,
-                method: "post",
-                data: update
-            })
-            .then(
-                response => res.status(response.status).json(response.data)
+                    url: `${URL}:${PORT}/api/products/updateproduct`,
+                    method: "post",
+                    data: update
+                })
+                .then(
+                    response => res.status(response.status).json(response.data)
                 )
-            .catch(
-                err => {
-                    console.log(err.response.data.message + ' ' + err.response.status);
-                    res.status(err.response.status).json(err.response.data);
-                }
-            )
+                .catch(
+                    err => {
+                        console.log(err.response.data.message + ' ' + err.response.status);
+                        res.status(err.response.status).json(err.response.data);
+                    }
+                )
         };
 
     })
