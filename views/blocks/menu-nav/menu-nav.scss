@@ -44,6 +44,11 @@
 		@extend .menu-nav__sign;
 	}
 
+	&__logout {
+		margin-right: 0.625rem;
+		@extend .menu-nav__sign;
+	}
+
 	&__user-name {
 		display: table-cell;
 		vertical-align: middle;

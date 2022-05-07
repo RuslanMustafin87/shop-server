@@ -13,7 +13,7 @@ module.exports.getIndex = function (req, res) {
         .then(
             response => {
                 res.render('index.pug', {
-                    products: response.data
+                    products: response.data,
                 })
             }
         )
@@ -56,5 +56,6 @@ module.exports.authUser = async function (req, res) {
         });
     }
 
+    req.session.userName = data.userName;
     res.render('index.pug', data);
 };
