@@ -41,7 +41,6 @@ module.exports.authAdmin = async function (req, res) {
 
 };
 
-
 module.exports.addProduct = function (req, res) {
 
     const form = new formidable.IncomingForm({

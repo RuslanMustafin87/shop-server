@@ -46,6 +46,7 @@ app.use(cookieParser('qwe'));
 app.use(session({
     secret: '170997',
     saveUninitialized: false,
+    resave: false,
     store: new MongoStore({mongooseConnection: mongoose.connection}),
     cookie: {
         signed: true,
