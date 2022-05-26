@@ -23,38 +23,6 @@ module.exports.getProduct = function (req, res) {
 
 };
 
-module.exports.authUser = async function (req, res) {
-    let data = {};
-
-    try {
-        let response = await axios({
-            url: `${URL}:${PORT}/api/users/authuser`,
-            method: "post",
-            data: {
-                email: req.body.email,
-                password: req.body.password
-            }
-        })
-        data.userName = response.data.name
-    } catch (err) {
-        return res.status( err.response.status ).redirect(`/product?msgLoginError=${err.response.data.message}`)
-    }
-
-    try {
-        let response = await axios({
-            url: `${URL}:${PORT}/api/products/getproduct?id=${req.query.id}`,
-            method: "get",
-        })
-        Object.assign(data, response.data);
-    } catch (err) {
-        return res.render('error.pug', {
-            message: `${err.response.data.message}`
-        });
-    }
-
-    res.render('product.pug', data);
-};
-
 module.exports.updateRatingProduct = function (req, res) {
 
     axios({

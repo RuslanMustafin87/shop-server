@@ -9,29 +9,6 @@ module.exports.getBasket = async function (req, res) {
     res.render('basket.pug');
 };
 
-module.exports.authUser = async function (req, res) {
-    let data = {};
-
-    try {
-        let response = await axios({
-            url: `${URL}:${PORT}/api/users/authuser`,
-            method: "post",
-            data: {
-                email: req.body.email,
-                password: req.body.password
-            }
-        })
-
-        data.userName = response.data.name
-
-        res.render('basket.pug', data);
-
-    } catch (err) {
-        return res.status( err.response.status ).redirect(`/basket?msgLoginError=${err.response.data.message}`)
-    }
-
-};
-
 module.exports.getProducts = async function (req, res) {
 
     let listIds = req.body;

@@ -52,7 +52,7 @@ app.use(session({
         signed: true,
         path: '/',
         httpOnly: true,
-        maxAge: null
+        maxAge: 86400
     }
 }));
 app.use(flash());
