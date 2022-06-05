@@ -1,12 +1,12 @@
-.sign(id='sign-block')
-    .sign__window
+.sign#sign-block
+    .sign__window#sign-window
         button.sign__cross-close(id='sign-cross-close')
-        form.sign__form(name='formSign' method='POST' action=_id ? `/users/adduser?id=${_id}` : `/users/adduser`)
+        form.sign__form(name='formSign' method='POST' action='/user/adduser')
             h1.sign__caption Регистрация
             input.sign__name(type="text" name='name' placeholder='Имя')
             input.sign__email(type="email" name='email' placeholder='e-mail')
             input.sign__password(type="password" name='password' placeholder='Пароль')
             .sign__error(id='sign-error')
             input.sign__submit(type='submit' name='submit' id='signSubmit' value='Отправить')
-        .sign__successfully#sign-successfully()
+        .sign__successfully#sign-successfully(hidden='true')
             p Пользователь успешно зарегистрирован

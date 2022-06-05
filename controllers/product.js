@@ -55,8 +55,6 @@ module.exports.updateRatingProduct = function (req, res) {
         response => res.status(200).json(response.data)
     ).catch(
         err => {
-            // TODO пробросить ошибку или нет если путь не доступен
-            console.log('Ошибка ' + err.message);
             res.status(500).json(err.response.data);
         }
     )

@@ -7,10 +7,10 @@ const ctrlBasket = require('../controllers/basket');
 const ctrlAdmin = require('../controllers/admin');
 
 const methodsOfUser = require('../middlewares/methods-of-user')
+const isAdmin = require('../middlewares/is-admin');
+const pagination = require('../middlewares/pagination');
 
-// TODO middleware для входа в админку
-// TODO сделать выход пользователя
-router.get('/', methodsOfUser.checkIsUser, ctrlIndex.getIndex);
+router.get('/', methodsOfUser.checkIsUser, pagination, ctrlIndex.getIndex);
 router.post('/authuser', methodsOfUser.authUser, ctrlIndex.getIndex);
 
 router.get('/product', methodsOfUser.checkIsUser, ctrlProduct.getProduct);
@@ -22,11 +22,12 @@ router.post('/basket/authuser', methodsOfUser.authUser, ctrlBasket.getBasket);
 router.post('/basket/getproducts', ctrlBasket.getProducts);
 router.post('/basket/addorder', ctrlBasket.addOrder);
 
-router.get('/admin', ctrlAdmin.getAdmin);
-router.post('/admin/addproduct', ctrlAdmin.addProduct);
-router.put('/admin/updateproduct', ctrlAdmin.updateProduct);
+router.get('/admin', isAdmin, ctrlAdmin.getAdmin);
+router.post('/admin/addproduct', isAdmin, ctrlAdmin.addProduct);
+router.put('/admin/updateproduct', isAdmin, ctrlAdmin.updateProduct);
 router.post('/admin/authadmin', ctrlAdmin.authAdmin);
 
-router.post('/users/adduser', methodsOfUser.validUser(), methodsOfUser.addUser);
+router.post('/user/adduser', methodsOfUser.validUser(), methodsOfUser.addUser);
+router.get(/(\/\w*)?\/logout/, methodsOfUser.logoutUser);
 
 module.exports = router;

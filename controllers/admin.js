@@ -5,8 +5,18 @@ const axios = require('axios');
 
 const config = require('../configs/config.json');
 const PORT = config.http.PORT;
-const URL = config.http.URL;
+const httpURL = config.http.URL;
 
+class AuthError extends Error {
+    constructor(status, ...params) {
+        super(...params)
+        if (Error.captureStackTrace) {
+            Error.captureStackTrace(this, AuthError);
+        }
+
+        this.status = status;
+    }
+}
 
 module.exports.getAdmin = function (req, res) {
     res.render('admin.pug');
@@ -14,11 +24,9 @@ module.exports.getAdmin = function (req, res) {
 
 module.exports.authAdmin = async function (req, res) {
 
-    // if ( req.session.isAdmin) res.render('admin.pug');
-
     try {
         let response = await axios({
-            url: `${URL}:${PORT}/api/users/authuser`,
+            url: `${httpURL}:${PORT}/api/users/authuser`,
             method: "post",
             data: {
                 email: req.body.email,
@@ -27,18 +35,32 @@ module.exports.authAdmin = async function (req, res) {
         })
 
         if (response.data.role === 'user') {
-            throw new Error('Доступ запрещен');
+            throw new AuthError(403, 'Доступ запрещен');
         }
 
         req.session.isAdmin = true;
-        res.render('admin.pug');
+        res.redirect('/admin');
     } catch (err) {
-        if (err.response && err.response.status === 500) {
-            return res.status(err.response.status).render('error.pug', err.response.data);
-        }
-        res.status(403).redirect(`/?msgLoginAdminError=Доступ запрещен`);
-    }
+        let url = new URL(req.headers.referer);
 
+        if (err.response) {
+            switch (err.response.status) {
+                case 500:
+                    return res.status(500).render('error.pug', err.response.data);
+                case 401:
+                case 404:
+                    url.searchParams.set('msgLoginAdminError', err.response.data.message);
+                    return res.status(err.response.status).redirect(url);
+            }
+        }
+
+        if (err instanceof AuthError) {
+            url.searchParams.set('msgLoginAdminError', err.message);
+            return res.status(err.status).redirect(url);
+        }
+
+        res.status(500).json('Ошибка на сервере');
+    }
 };
 
 module.exports.addProduct = function (req, res) {
@@ -107,7 +129,7 @@ module.exports.addProduct = function (req, res) {
         }
 
         axios({
-                url: `${URL}:${PORT}/api/products/addproduct`,
+                url: `${httpURL}:${PORT}/api/products/addproduct`,
                 method: "post",
                 data: data
             })
@@ -155,7 +177,7 @@ module.exports.updateProduct = function (req, res) {
         if (files.image.name === '') {
 
             axios({
-                    url: `${URL}:${PORT}/api/products/updateproduct`,
+                    url: `${httpURL}:${PORT}/api/products/updateproduct`,
                     method: "put",
                     data: update
                 })
@@ -181,7 +203,7 @@ module.exports.updateProduct = function (req, res) {
             update.images = reader.result;
 
             axios({
-                    url: `${URL}:${PORT}/api/products/updateproduct`,
+                    url: `${httpURL}:${PORT}/api/products/updateproduct`,
                     method: "post",
                     data: update
                 })

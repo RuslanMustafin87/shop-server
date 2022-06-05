@@ -43,8 +43,8 @@ class MethodsOfUser {
     }
 
     async authUser(req, res, next) {
-
         try {
+
             let response = await axios({
                 url: `${httpURL}:${httpPORT}/api/users/authuser`,
                 method: "post",
@@ -64,6 +64,18 @@ class MethodsOfUser {
         }
     }
 
+    logoutUser(req, res, next){
+        req.session.destroy(() => {
+            let url = new URL(req.headers.referer);
+            if (url.pathname === '/authuser') {
+                url.pathname = '/';
+            } else {
+                url.pathname = url.pathname.split('/')[1];
+            }
+            res.status(200).redirect(url)
+        });
+    }
+
     checkIsUser(req, res, next) {
         if (req.session.userName) {
             res.locals.userName = req.session.userName;
@@ -72,7 +84,6 @@ class MethodsOfUser {
     }
 
     validUser(req, res, next) {
-        console.log('hi');
         return [
             check('email')
             .normalizeEmail()

@@ -4,9 +4,10 @@ const path = require('path');
 const fs = require('fs');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
-const bunyan = require('bunyan');
+const morgan = require('morgan');
 const flash = require('connect-flash');
 const session = require('express-session');
+const paginate = require('express-paginate');
 const mongoose = require('mongoose');
 const MongoStore = require('connect-mongo')(session);
 
@@ -15,26 +16,20 @@ const PORT = config.http.PORT;
 
 require('./api/models/db');
 
-var log = bunyan.createLogger({
-    name: 'myserver',
-    serializers: {
-        req: bunyan.stdSerializers.req,
-        res: bunyan.stdSerializers.res
-    }
-});
-
 var router = require('./router/router');
 var apiRouter = require('./api/router/router');
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
-// TODO сделать логгер
+var accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a', interval: '8h' })
+
 // TODO подключить dotoenv чтоб шифровать данные
 app.use(cors({
     origin: '*',
     optionsSuccessStatus: 200
 }));
+app.use(morgan(':method :url :status :response-time ms - :res[content-length] ', {stream: accessLogStream} ));
 app.use(express.json({
     limit: '50mb'
 }));
@@ -44,7 +39,7 @@ app.use(express.urlencoded({
 }));
 app.use(cookieParser('qwe'));
 app.use(session({
-    secret: '170997',
+    secret: '170997koT',
     saveUninitialized: false,
     resave: false,
     store: new MongoStore({mongooseConnection: mongoose.connection}),
@@ -55,23 +50,15 @@ app.use(session({
         maxAge: 86400
     }
 }));
+app.use(paginate.middleware(10, 50));
 app.use(flash());
 app.use(express.static(path.join(__dirname, 'public')));
-
-app.use('/home', function(req, res, next){
-    if (!req.session.isAdmin === true) {
-        res.redirect('/');
-    } else {
-        next();
-    }
-})
 
 app.use('/', router);
 app.use('/api', apiRouter);
 
 app.listen(PORT, function () {
 
-    log.info('server listening');
     console.log(`Запущено на порте ${PORT}`);
 
 })
