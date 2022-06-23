@@ -47,7 +47,7 @@ app.use(session({
         signed: true,
         path: '/',
         httpOnly: true,
-        maxAge: 86400
+        maxAge: 86400000
     }
 }));
 app.use(paginate.middleware(10, 50));

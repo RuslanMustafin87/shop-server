@@ -20,8 +20,7 @@ module.exports.getProducts = function (req, res) {
         .sort({
             price: 1
         })
-        // .populate('category')
-        // .exec()
+        .populate('category')
         .then(
             products => {
                 if (!products.length) throw new ProductError('generic', 404, 'Данные не найдены');
@@ -48,7 +47,7 @@ module.exports.getOneProduct = function (req, res) {
         .findOne({
             _id: req.query.id
         })
-        // .populate('category')
+        .populate('category')
         .then(
             product => {
                 if (!product) throw new ProductError('generic', 404, 'Товар не найден');

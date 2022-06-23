@@ -9,7 +9,7 @@ const furnituresSchema = mongoose.Schema({
 
 mongoose.model('furnitures', furnituresSchema);
 
-let F = mongoose.model('furnitures');
+// let F = mongoose.model('furnitures');
 
 // new F({
 //     furniture: 'sofa'

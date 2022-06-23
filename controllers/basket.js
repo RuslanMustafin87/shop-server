@@ -1,5 +1,5 @@
 const axios = require('axios');
-const nodemailer = require('nodemailer');
+// const nodemailer = require('nodemailer');
 
 const config = require('../configs/config.json');
 const PORT = config.http.PORT;
@@ -46,7 +46,7 @@ module.exports.getProducts = async function (req, res) {
 }
 
 module.exports.addOrder = async function (req, res) {
-    let testAccount = await nodemailer.createTestAccount();
+    // let testAccount = await nodemailer.createTestAccount();
 
     axios.post(`${URL}:${PORT}/api/orders/addorder`, req.body)
         .then(
@@ -56,21 +56,21 @@ module.exports.addOrder = async function (req, res) {
             err => res.status(500).json(err.response.data)
         )
     // TODO исправить отправку письма, крашит сервер
-    let transporter = nodemailer.createTransport({
-        service: 'gmail',
-        host: "smtp.gmail.com",
-        port: 465,
-        secure: true, // true for 465, false for other ports
-        auth: {
-            user: 'rostislavmustafin87@gmail.com', // generated ethereal user
-            pass: 'jWYeCCr77hD3', // generated ethereal password
-        },
-    });
+    // let transporter = nodemailer.createTransport({
+    //     service: 'gmail',
+    //     host: "smtp.gmail.com",
+    //     port: 465,
+    //     secure: true, // true for 465, false for other ports
+    //     auth: {
+    //         user: 'rostislavmustafin87@gmail.com', // generated ethereal user
+    //         pass: 'jWYeCCr77hD3', // generated ethereal password
+    //     },
+    // });
 
-    let info = await transporter.sendMail({
-        from: "Fred Foo 👻" , // sender address
-        to: "ruslanmust87@gmail.com", // list of receivers
-        subject: "Hello ✔", // Subject line
-        text: "Hello world?", // plain text body
-    });
+    // let info = await transporter.sendMail({
+    //     from: "Fred Foo 👻" , // sender address
+    //     to: "ruslanmust87@gmail.com", // list of receivers
+    //     subject: "Hello ✔", // Subject line
+    //     text: "Hello world?", // plain text body
+    // });
 }

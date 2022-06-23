@@ -1,12 +1,12 @@
 const axios = require('axios');
 const config = require('../configs/config.json');
 const PORT = config.http.PORT;
-const URL = config.http.URL;
+const httpURL = config.http.URL;
 
 module.exports.getProduct = function (req, res) {
 
     axios({
-        url: `${URL}:${PORT}/api/products/getproduct?id=${req.query.id}`,
+        url: `${httpURL}:${PORT}/api/products/getproduct?id=${req.query.id}`,
         method: 'GET',
     })
     .then(
@@ -14,7 +14,7 @@ module.exports.getProduct = function (req, res) {
     )
     .catch(
         err => {
-            console.log('Ошибка в данных ' + err.message);
+            console.log('Ошибка данных ' + err.message);
             res.render('error.pug', {
                 message: `${err.response.data.message}`
             });
@@ -26,7 +26,7 @@ module.exports.getProduct = function (req, res) {
 module.exports.updateRatingProduct = function (req, res) {
 
     axios({
-        url: `${URL}:${PORT}/api/products/getproduct?id=${req.body.id}`,
+        url: `${httpURL}:${PORT}/api/products/getproduct?id=${req.body.id}`,
     }).then(
         response => {
             return response.data;
@@ -46,7 +46,7 @@ module.exports.updateRatingProduct = function (req, res) {
             });
 
             return axios({
-                url: `${URL}:${PORT}/api/products/updateproduct`,
+                url: `${httpURL}:${PORT}/api/products/updateproduct`,
                 method: 'put',
                 data: body
             })

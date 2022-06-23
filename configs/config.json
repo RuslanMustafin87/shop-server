@@ -9,5 +9,8 @@
         "name": "testShop",
         "user": "",
         "password": ""
+    },
+    "dbDocker": {
+        "url": "mongodb://docker:mongopw@localhost:55001"
     }
 }

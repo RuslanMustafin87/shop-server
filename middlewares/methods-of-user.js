@@ -43,6 +43,7 @@ class MethodsOfUser {
     }
 
     async authUser(req, res, next) {
+        console.log( req.query );
         try {
 
             let response = await axios({
@@ -67,11 +68,11 @@ class MethodsOfUser {
     logoutUser(req, res, next){
         req.session.destroy(() => {
             let url = new URL(req.headers.referer);
-            if (url.pathname === '/authuser') {
-                url.pathname = '/';
-            } else {
-                url.pathname = url.pathname.split('/')[1];
-            }
+            // if (url.pathname === '/authuser') {
+            //     url.pathname = '/';
+            // } else {
+            //     url.pathname = url.pathname.split('/')[1];
+            // }
             res.status(200).redirect(url)
         });
     }

@@ -18,8 +18,32 @@ class AuthError extends Error {
     }
 }
 
-module.exports.getAdmin = function (req, res) {
-    res.render('admin.pug');
+module.exports.getAdmin = async function (req, res) {
+    try {
+        let responseOrders = await axios({
+            url: `${httpURL}:${PORT}/api/orders`,
+            method: "get",
+        })
+
+        let orders = await responseOrders.data;
+
+        let responseUsers = await axios({
+            url: `${httpURL}:${PORT}/api/users`,
+            method: "get",
+        })
+
+        let users = await responseUsers.data;
+
+        res.render('admin.pug', {orders, users});
+
+    } catch (err) {
+        console.log('Ошибка ' + err.message);
+        res.render('error.pug', {
+            message: `${err.response.data.message}`
+        });
+
+    };
+
 };
 
 module.exports.authAdmin = async function (req, res) {
@@ -40,6 +64,7 @@ module.exports.authAdmin = async function (req, res) {
 
         req.session.isAdmin = true;
         res.redirect('/admin');
+
     } catch (err) {
         let url = new URL(req.headers.referer);
 
@@ -138,6 +163,7 @@ module.exports.addProduct = function (req, res) {
             )
             .catch(
                 err => {
+                    console.log('111');
                     console.log(`Ошибка ${err.status} ${err.message}`);
                     res.status(err.status).json(
                         err.response.data

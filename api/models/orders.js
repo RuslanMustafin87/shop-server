@@ -10,13 +10,16 @@ const ordersSchema = mongoose.Schema({
         required: true
     },
     total: {
-        type: Number,
+        type: String,
         required: true,
     },
-    productList: {
-        type: Array,
-        required: true
-    },
+    productList: [{
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: 'products'
+    }],
+}, {
+    timestamps: true
 });
 
 mongoose.model('orders', ordersSchema);

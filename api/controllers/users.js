@@ -13,6 +13,34 @@ class UserError extends Error {
     }
 }
 
+module.exports.getUsers = function (req, res) {
+    const User = mongoose.model('users');
+
+    User
+        .find()
+        // .sort({
+        // price: 1
+        // })
+        // .populate('category')
+        .then(
+            users => {
+                if (!users.length) throw new UserError('generic', 404, 'Данные не найдены');
+                res.status(200).json(users);
+            }, )
+        .catch(
+            err => {
+                if (err instanceof UserError) {
+                    return res.status(err.status).json({
+                        message: err.message
+                    });
+                }
+                res.status(500).json({
+                    message: 'Ошибка на сервере'
+                });
+            }
+        )
+}
+
 module.exports.addUser = function (req, res) {
     const User = mongoose.model('users');
 

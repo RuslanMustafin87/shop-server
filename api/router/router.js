@@ -13,8 +13,10 @@ router.post('/products/addproduct', ctrlProducts.addProduct);
 router.delete('/products/deleteproduct', ctrlProducts.deleteProduct);
 router.put('/products/updateproduct', ctrlProducts.updateProduct);
 
+router.get('/orders', ctrlOrders.getOrders);
 router.post('/orders/addorder', ctrlOrders.addOrder);
 
+router.get('/users', ctrlUsers.getUsers);
 router.post('/users/adduser', ctrlUsers.addUser);
 router.post('/users/authuser', ctrlUsers.authUser);
 
