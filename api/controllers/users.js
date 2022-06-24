@@ -18,10 +18,6 @@ module.exports.getUsers = function (req, res) {
 
     User
         .find()
-        // .sort({
-        // price: 1
-        // })
-        // .populate('category')
         .then(
             users => {
                 if (!users.length) throw new UserError('generic', 404, 'Данные не найдены');
@@ -46,10 +42,9 @@ module.exports.addUser = function (req, res) {
 
     let user = new User({
         name: req.body.name,
-        email: req.body.email
+        email: req.body.email,
+        passwordHash: req.body.password
     });
-
-    user.setPassword(req.body.password);
 
     User
         .findOne({
@@ -92,6 +87,7 @@ module.exports.authUser = function (req, res) {
             user => {
                 if (!user) throw new UserError('generic', 404, 'Пользователя не существует');
                 if (!user.validPassword(req.body.password)) throw new UserError('generic', 401, 'Неверный пароль');
+
                 res.status(200).json({
                     name: user.name,
                     role: user.role

@@ -33,13 +33,10 @@ module.exports.updateRatingProduct = function (req, res) {
         },
     ).then(
         data => {
-            let realRating = +((data.rating.realRating * data.rating.countOfVoters + req.body.rating) / (data.rating.countOfVoters + 1)).toFixed(2);
-
-            let roundedRating = Math.round(realRating);
+            let realRating = +((data.rating.realRating * data.rating.countOfVoters + +req.body.rating) / (data.rating.countOfVoters + 1)).toFixed(2);
 
             let body = Object.assign(req.body, {
                 rating: {
-                    roundedRating,
                     realRating,
                     countOfVoters: ++data.rating.countOfVoters,
                 }

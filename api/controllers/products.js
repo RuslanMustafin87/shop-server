@@ -76,15 +76,6 @@ module.exports.addProduct = function (req, res) {
     const Product = mongoose.model('products');
     const Furniture = mongoose.model('furnitures');
 
-    // let product = new Product({
-    //     name: req.body.name,
-    //     price: req.body.price,
-    //     priceIntl: req.body.priceIntl,
-    //     images: req.body.images,
-    //     // category: req.body.category,
-    //     rating: req.body.rating,
-    // });
-
     Furniture
         .findOne({furniture: req.body.category})
         .then(
@@ -92,10 +83,8 @@ module.exports.addProduct = function (req, res) {
                 let product = new Product({
                     name: req.body.name,
                     price: req.body.price,
-                    priceIntl: req.body.priceIntl,
                     images: req.body.images,
                     category: furniture._id,
-                    rating: req.body.rating,
                 });
                 return product.save()
             }

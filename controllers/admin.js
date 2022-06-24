@@ -47,7 +47,7 @@ module.exports.getAdmin = async function (req, res) {
 };
 
 module.exports.authAdmin = async function (req, res) {
-
+    console.log( 'auth' );
     try {
         let response = await axios({
             url: `${httpURL}:${PORT}/api/users/authuser`,
@@ -132,25 +132,11 @@ module.exports.addProduct = function (req, res) {
             });
         }
 
-        let priceIntl = (+fields.price).toLocaleString('ru-RU', {
-            style: 'currency',
-            currency: 'RUB',
-            useGrouping: true,
-            maximumFractionDigits: 0,
-            minimumFractionDigits: 0
-        })
-
         let data = {
             name: fields.name,
             price: fields.price,
-            priceIntl: priceIntl,
             images: images,
             category: fields.category,
-            rating: {
-                roundedRating: 0,
-                realRating: 0,
-                countOfVoters: 0
-            }
         }
 
         axios({
@@ -163,7 +149,6 @@ module.exports.addProduct = function (req, res) {
             )
             .catch(
                 err => {
-                    console.log('111');
                     console.log(`Ошибка ${err.status} ${err.message}`);
                     res.status(err.status).json(
                         err.response.data
@@ -188,17 +173,17 @@ module.exports.updateProduct = function (req, res) {
             if (fields[item] !== undefined) update[item] = fields[item];
         }
 
-        if (fields.price) {
-            let priceIntl = (+fields.price).toLocaleString('ru-RU', {
-                style: 'currency',
-                currency: 'RUB',
-                useGrouping: true,
-                maximumFractionDigits: 0,
-                minimumFractionDigits: 0
-            })
+        // if (fields.price) {
+        //     let priceIntl = (+fields.price).toLocaleString('ru-RU', {
+        //         style: 'currency',
+        //         currency: 'RUB',
+        //         useGrouping: true,
+        //         maximumFractionDigits: 0,
+        //         minimumFractionDigits: 0
+        //     })
 
-            update.priceIntl = priceIntl;
-        }
+        //     update.priceIntl = priceIntl;
+        // }
 
         if (files.image.name === '') {
 

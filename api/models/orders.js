@@ -19,7 +19,23 @@ const ordersSchema = mongoose.Schema({
         ref: 'products'
     }],
 }, {
-    timestamps: true
+    // TODO сделать вывод времени в предсатвлении
+    timestamps: true,
+    toJSON: {
+        virtuals: true,
+    }
 });
+
+ordersSchema.virtual('datecreate')
+    .get(function (){
+        return (new Date(this.createdAt).toLocaleString('ru-RU', {
+            timeZone: 'Asia/Yekaterinburg',
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
+        }));
+    });
 
 mongoose.model('orders', ordersSchema);

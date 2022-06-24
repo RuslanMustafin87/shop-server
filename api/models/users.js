@@ -11,8 +11,13 @@ const userSchema = mongoose.Schema({
         required: true,
         unique: true
     },
-    hash: {
-        type: String
+    passwordHash: {
+        type: String,
+        required: true,
+        set: password => {
+            const salt = bcrypt.genSaltSync(10);
+            return bcrypt.hashSync(password, salt);
+        }
     },
     role: {
         type: String,
@@ -20,13 +25,8 @@ const userSchema = mongoose.Schema({
     }
 });
 
-userSchema.methods.setPassword = function(password){
-    const salt = bcrypt.genSaltSync(10);
-    this.hash = bcrypt.hashSync(password, salt);
-}
-
 userSchema.methods.validPassword = function(password){
-    return bcrypt.compareSync(password, this.hash);
+    return bcrypt.compareSync(password, this.passwordHash);
 }
 
 mongoose.model('users', userSchema);
