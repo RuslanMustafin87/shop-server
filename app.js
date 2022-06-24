@@ -7,7 +7,7 @@ const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
 const flash = require('connect-flash');
 const session = require('express-session');
-const paginate = require('express-paginate');
+// const paginate = require('express-paginate');
 const mongoose = require('mongoose');
 const MongoStore = require('connect-mongo')(session);
 
@@ -50,7 +50,7 @@ app.use(session({
         maxAge: 86400000
     }
 }));
-app.use(paginate.middleware(10, 50));
+// app.use(paginate.middleware(10, 50));
 app.use(flash());
 app.use(express.static(path.join(__dirname, 'public')));
 

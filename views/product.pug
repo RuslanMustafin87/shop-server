@@ -11,7 +11,7 @@ block content
         h1.product__name= name
         p.product__price= priceIntl
         .product__rating
-            - var ratingCheck = rating.roundedRating
+            - var ratingCheck = roundedRating
             include ./blocks/rating-star/rating-star.pug
         button.product__button-add Добавить в корзину
         .product__review

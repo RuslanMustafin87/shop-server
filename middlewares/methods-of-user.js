@@ -1,8 +1,8 @@
 const config = require('../configs/config.json');
 const httpPORT = config.http.PORT;
 const httpURL = config.http.URL;
-
 const axios = require('axios');
+
 const {
     check,
     validationResult
@@ -18,6 +18,7 @@ class MethodsOfUser {
                 onlyFirstError: true
             }).map((err) => err.msg).join(' ');
             return res.status(400).redirect(`/?msgSignError=${errStr}`);
+            // return res.json({token: 'hello'})
         }
 
         axios({
@@ -43,7 +44,6 @@ class MethodsOfUser {
     }
 
     async authUser(req, res, next) {
-        console.log( req.query );
         try {
 
             let response = await axios({
@@ -54,6 +54,7 @@ class MethodsOfUser {
                     password: req.body.password
                 }
             });
+            console.log( response.data.name );
             req.session.userName = response.data.name;
             res.locals.userName = response.data.name;
             next();
