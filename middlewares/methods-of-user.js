@@ -2,6 +2,7 @@ const config = require('../configs/config.json');
 const httpPORT = config.http.PORT;
 const httpURL = config.http.URL;
 const axios = require('axios');
+const passport = require('passport');
 
 const {
     check,
@@ -43,30 +44,54 @@ class MethodsOfUser {
             )
     }
 
-    async authUser(req, res, next) {
-        try {
+    // async authUser(req, res, next) {
+    //     try {
 
-            let response = await axios({
-                url: `${httpURL}:${httpPORT}/api/users/authuser`,
-                method: "post",
-                data: {
-                    email: req.body.email,
-                    password: req.body.password
-                }
-            });
-            console.log( response.data.name );
-            req.session.userName = response.data.name;
-            res.locals.userName = response.data.name;
-            next();
-        } catch (err) {
-            let url = new URL(req.headers.referer);
-            url.searchParams.set('msgLoginError', err.response.data.message);
+    //         let response = await axios({
+    //             url: `${httpURL}:${httpPORT}/api/users/authuser`,
+    //             method: "post",
+    //             data: {
+    //                 email: req.body.email,
+    //                 password: req.body.password
+    //             }
+    //         });
 
-            return res.status(err.response.status).redirect(url);
-        }
+    //         req.session.userName = response.data.name;
+    //         res.locals.userName = response.data.name;
+    //         next();
+    //     } catch (err) {
+    //         let url = new URL(req.headers.referer);
+    //         url.searchParams.set('msgLoginError', err.response.data.message);
+
+    //         return res.status(err.response.status).redirect(url);
+    //     }
+    // }
+
+    authUser(req, res, next) {
+        passport.authenticate('local', (err, user, info) => {
+            if (err) return next(err);
+
+            // if (!user) {return res.json({
+            //     status: 'Invalid user or password'
+            // })}
+
+            if (!user) {
+                let url = new URL(req.headers.referer);
+                url.searchParams.set('msgLoginError', info);
+                return res.status(404).redirect(url);
+            }
+
+            req.logIn(user, function (err) {
+                if (err) return next(err);
+
+                req.session.userName = user.name;
+                res.locals.userName = user.name;
+                return next()
+            })
+        })(req, res, next);
     }
 
-    logoutUser(req, res, next){
+    logoutUser(req, res, next) {
         req.session.destroy(() => {
             let url = new URL(req.headers.referer);
             // if (url.pathname === '/authuser') {

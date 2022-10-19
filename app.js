@@ -10,6 +10,7 @@ const session = require('express-session');
 // const paginate = require('express-paginate');
 const mongoose = require('mongoose');
 const MongoStore = require('connect-mongo')(session);
+const passport = require('passport');
 
 const config = require('./configs/config.json');
 const PORT = config.http.PORT;
@@ -40,8 +41,8 @@ app.use(express.urlencoded({
 app.use(cookieParser('qwe'));
 app.use(session({
     secret: '170997koT',
-    saveUninitialized: false,
-    resave: false,
+    saveUninitialized: true,
+    resave: true,
     store: new MongoStore({mongooseConnection: mongoose.connection}),
     cookie: {
         signed: true,
@@ -54,11 +55,19 @@ app.use(session({
 app.use(flash());
 app.use(express.static(path.join(__dirname, 'public')));
 
+require('./configs/config-passport');
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use('/', router);
 app.use('/api', apiRouter);
 
 app.listen(PORT, function () {
-
     console.log(`Запущено на порте ${PORT}`);
 
 })
+
+app.use(function(err, req, res, next) {
+    console.error(err.stack);
+    res.status(500).send('Something broke!');
+  });

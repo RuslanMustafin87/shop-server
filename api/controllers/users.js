@@ -77,37 +77,37 @@ module.exports.addUser = function (req, res) {
         )
 }
 
-module.exports.authUser = function (req, res) {
-    const User = mongoose.model('users');
-    User
-        .findOne({
-            email: req.body.email
-        })
-        .then(
-            user => {
-                if (!user) throw new UserError('generic', 404, 'Пользователя не существует');
-                if (!user.validPassword(req.body.password)) throw new UserError('generic', 401, 'Неверный пароль');
+// module.exports.authUser = function (req, res) {
+//     const User = mongoose.model('users');
+//     User
+//         .findOne({
+//             email: req.body.email
+//         })
+//         .then(
+//             user => {
+//                 if (!user) throw new UserError('generic', 404, 'Пользователя не существует');
+//                 if (!user.validPassword(req.body.password)) throw new UserError('generic', 401, 'Неверный пароль');
 
-                res.status(200).json({
-                    name: user.name,
-                    role: user.role
-                });
-            },
-            err => {
-                throw new UserError('generic', 404, 'Пользователя не существует');
-            }
-        )
-        .catch(
-            err => {
-                if (err instanceof UserError) {
-                    return res.status(err.status).json({
-                        message: err.message
-                    });
-                }
-                res.status(500).json({
-                    message: 'Ошибка на сервере'
-                });
-            }
-        )
+//                 res.status(200).json({
+//                     name: user.name,
+//                     role: user.role
+//                 });
+//             },
+//             err => {
+//                 throw new UserError('generic', 404, 'Пользователя не существует');
+//             }
+//         )
+//         .catch(
+//             err => {
+//                 if (err instanceof UserError) {
+//                     return res.status(err.status).json({
+//                         message: err.message
+//                     });
+//                 }
+//                 res.status(500).json({
+//                     message: 'Ошибка на сервере'
+//                 });
+//             }
+//         )
 
-}
+// }
